@@ -157,7 +157,7 @@
 
     .room-scene {
       position: relative; z-index: 1;
-      max-width: 1100px; margin: 0 auto;
+      max-width: 1280px; margin: 0 auto;
       padding: 32px 32px 0;
       min-height: 100vh;
       display: flex; flex-direction: column;
@@ -207,12 +207,13 @@
 
     /* ── Side Navigation ── */
     .side-nav {
-      width: 90px; flex-shrink: 0;
+      width: 110px; flex-shrink: 0;
       display: flex; flex-direction: column;
+      align-items: center;
       gap: 20px; padding-top: 20px;
     }
 
-    .side-nav.right { align-items: flex-end; }
+    .side-nav.right { align-items: center; }
 
     .side-link {
       display: flex; flex-direction: column; align-items: center;
@@ -517,6 +518,199 @@
     }
 
     .floor-plant { font-size: 36px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); }
+
+    /* ── Bookshelf ── */
+    .bookshelf {
+      width: 80px; margin-top: 16px;
+      animation: fadeUp 0.5s ease 0.3s both;
+    }
+
+    .bookshelf-top {
+      width: 80px; height: 6px;
+      background: linear-gradient(180deg, #7a6a4a, #6a5a3a);
+      border: 1.5px solid #5a4a2a;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .shelf-row {
+      width: 80px; height: 30px;
+      background: #8a7a5a;
+      border-left: 2px solid #6a5a3a;
+      border-right: 2px solid #6a5a3a;
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 2px; padding: 0 4px;
+    }
+
+    .shelf-divider {
+      width: 80px; height: 4px;
+      background: linear-gradient(180deg, #7a6a4a, #6a5a3a);
+      border-left: 2px solid #5a4a2a;
+      border-right: 2px solid #5a4a2a;
+    }
+
+    .book { width: 8px; border-radius: 1px 1px 0 0; box-shadow: 1px 0 0 rgba(0,0,0,0.1); }
+
+    .furniture-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 5px; color: #8a7e6a; text-align: center; margin-top: 5px;
+    }
+
+    /* ── Filing Cabinet ── */
+    .filing-cabinet {
+      width: 50px; margin-top: 12px;
+      animation: fadeUp 0.5s ease 0.4s both;
+    }
+
+    .cabinet-body {
+      width: 50px;
+      background: #7a7a8a;
+      border: 2px solid #5a5a6a;
+      border-radius: 2px;
+      box-shadow: 0 3px 0 #4a4a5a;
+    }
+
+    .cabinet-drawer {
+      height: 20px;
+      border-bottom: 1.5px solid #5a5a6a;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .cabinet-drawer:last-child { border-bottom: none; }
+
+    .cabinet-handle {
+      width: 14px; height: 3px;
+      background: #9a9aaa; border-radius: 1px;
+      border: 1px solid #6a6a7a;
+    }
+
+    /* ── Water Cooler ── */
+    .water-cooler {
+      width: 44px; margin-top: 16px;
+      display: flex; flex-direction: column; align-items: center;
+      animation: fadeUp 0.5s ease 0.35s both;
+    }
+
+    .cooler-jug {
+      width: 26px; height: 26px;
+      background: linear-gradient(180deg, rgba(150,200,240,0.35), rgba(100,170,230,0.55));
+      border: 2px solid rgba(80,150,210,0.45);
+      border-radius: 6px 6px 2px 2px;
+      position: relative;
+    }
+
+    .cooler-jug::after {
+      content: ''; position: absolute;
+      top: 3px; left: 3px; width: 5px; height: 8px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+    }
+
+    .cooler-body {
+      width: 32px; height: 28px;
+      background: #e8e0d0;
+      border: 2px solid #c0b090;
+      border-radius: 2px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+    }
+
+    .cooler-tap { width: 8px; height: 4px; border-radius: 0 0 2px 2px; }
+    .cooler-tap.hot { background: #ea6a4a; }
+    .cooler-tap.cold { background: #4a8aea; }
+
+    .cooler-stand {
+      width: 24px; height: 12px;
+      border-left: 3px solid #b0a080;
+      border-right: 3px solid #b0a080;
+      border-bottom: 3px solid #b0a080;
+      border-radius: 0 0 2px 2px;
+    }
+
+    /* ── Whiteboard ── */
+    .whiteboard {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 6px;
+      animation: fadeUp 0.5s ease 0.15s both;
+    }
+
+    .wb-frame {
+      width: 220px; height: 64px;
+      background: #f0ece4;
+      border: 3px solid #a0a0a0;
+      border-radius: 3px;
+      box-shadow: 0 3px 0 #888, 0 5px 8px rgba(0,0,0,0.08);
+      padding: 8px 12px;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+
+    .wb-line { height: 2px; border-radius: 1px; opacity: 0.35; }
+
+    .wb-tray {
+      width: 80px; height: 5px;
+      background: #c0c0c0; border: 1px solid #a0a0a0;
+      border-radius: 0 0 3px 3px;
+      margin: 0 auto;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+
+    .wb-marker { width: 10px; height: 3px; border-radius: 1px; }
+
+    /* ── Couch / Lounge Area ── */
+    .lounge-area {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 20px; padding: 16px 0 8px;
+      animation: fadeUp 0.5s ease 0.4s both;
+    }
+
+    .couch { display: flex; flex-direction: column; align-items: center; }
+
+    .couch-back {
+      width: 110px; height: 16px;
+      background: linear-gradient(180deg, #6a5a8a, #5a4a7a);
+      border: 2px solid #4a3a6a;
+      border-radius: 6px 6px 0 0;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.08);
+    }
+
+    .couch-seat {
+      width: 120px; height: 12px;
+      background: #7a6a9a;
+      border: 2px solid #5a4a7a; border-top: none;
+      border-radius: 0 0 4px 4px;
+      display: flex; align-items: center; justify-content: center; gap: 18px;
+    }
+
+    .couch-cushion {
+      width: 2px; height: 6px;
+      background: rgba(0,0,0,0.1); border-radius: 1px;
+    }
+
+    .couch-legs { display: flex; justify-content: space-between; width: 110px; }
+
+    .couch-leg {
+      width: 4px; height: 5px;
+      background: #4a3a6a; border-radius: 0 0 2px 2px;
+    }
+
+    .side-table { display: flex; flex-direction: column; align-items: center; }
+
+    .side-table-top {
+      width: 32px; height: 5px;
+      background: linear-gradient(180deg, #b09870, #9a8660);
+      border: 1.5px solid #7a6a4a; border-radius: 2px;
+      box-shadow: 0 2px 0 #6a5a3a;
+    }
+
+    .side-table-leg { width: 3px; height: 12px; background: #7a6a4a; }
+
+    .side-table-item { font-size: 12px; margin-bottom: 2px; }
+
+    .rug {
+      width: 180px; height: 6px;
+      background: repeating-linear-gradient(90deg, #8a6a5a 0px, #8a6a5a 8px, #9a7a6a 8px, #9a7a6a 16px);
+      border-radius: 3px; border: 1px solid #7a5a4a; opacity: 0.45;
+      margin-top: 4px;
+    }
 
     /* ════════════════════════════════
        CHAT VIEW — Retro Workroom Theme
@@ -981,6 +1175,12 @@
       .side-label { font-size: 5px; }
       .desk-row { gap: 16px; }
       .desk-table { width: 100px; }
+      .bookshelf, .filing-cabinet, .water-cooler { display: none; }
+      .whiteboard .wb-frame { width: 180px; height: 52px; }
+      .lounge-area { gap: 14px; }
+      .couch-back { width: 90px; }
+      .couch-seat { width: 100px; }
+      .couch-legs { width: 90px; }
     }
 
     @media (max-width: 768px) {
@@ -995,6 +1195,9 @@
       .pixel-char { width: 52px; height: 60px; }
       .desk-table { width: 100px; height: 16px; }
       .desk-name { font-size: 8px; }
+      .whiteboard { display: none; }
+      .lounge-area { display: none; }
+      .rug { display: none; }
 
       .browser-window {
         width: 100vw; height: 100vh;
@@ -1034,6 +1237,23 @@
         <div class="room-subtitle">click an agent to start chatting</div>
       </div>
 
+      <!-- Whiteboard -->
+      <div class="whiteboard">
+        <div class="wb-frame">
+          <div class="wb-line" style="width:70%;background:#ea6a4a"></div>
+          <div class="wb-line" style="width:55%;background:#3a7aea"></div>
+          <div class="wb-line" style="width:80%;background:#4a8a4a"></div>
+          <div class="wb-line" style="width:40%;background:#ea8a2a"></div>
+          <div class="wb-line" style="width:65%;background:#6a3adc"></div>
+        </div>
+        <div class="wb-tray">
+          <div class="wb-marker" style="background:#ea4a4a"></div>
+          <div class="wb-marker" style="background:#3a7aea"></div>
+          <div class="wb-marker" style="background:#2a8a4a"></div>
+        </div>
+        <div class="furniture-label">whiteboard</div>
+      </div>
+
       <!-- Room Body -->
       <div class="room-body">
 
@@ -1047,6 +1267,33 @@
         <div class="side-nav right" id="sideNavRight"></div>
 
       </div>
+
+      <!-- Lounge Area -->
+      <div class="lounge-area">
+        <div class="side-table">
+          <div class="side-table-item">&#x1F34E;</div>
+          <div class="side-table-top"></div>
+          <div class="side-table-leg" style="margin:0 auto"></div>
+        </div>
+        <div class="couch">
+          <div class="couch-back"></div>
+          <div class="couch-seat">
+            <div class="couch-cushion"></div>
+            <div class="couch-cushion"></div>
+          </div>
+          <div class="couch-legs">
+            <div class="couch-leg"></div>
+            <div class="couch-leg"></div>
+          </div>
+        </div>
+        <div class="side-table">
+          <div class="side-table-item">&#x2615;</div>
+          <div class="side-table-top"></div>
+          <div class="side-table-leg" style="margin:0 auto"></div>
+        </div>
+      </div>
+      <div class="rug" style="margin:0 auto"></div>
+      <div class="furniture-label" style="margin:0 auto 8px">lounge</div>
 
       <!-- Checkered Floor -->
       <div class="room-floor">
@@ -1616,9 +1863,56 @@
         leftNav.innerHTML += '<div class="side-link"><div class="side-icon">' + item.icon + '</div><div class="side-label">' + item.label + '</div></div>';
       });
 
+      // Bookshelf
+      leftNav.innerHTML +=
+        '<div class="bookshelf">' +
+          '<div class="bookshelf-top"></div>' +
+          '<div class="shelf-row">' +
+            '<div class="book" style="height:22px;background:#c44a3a"></div>' +
+            '<div class="book" style="height:18px;background:#3a7aea"></div>' +
+            '<div class="book" style="height:24px;background:#4a8a4a"></div>' +
+            '<div class="book" style="height:16px;background:#ea8a2a"></div>' +
+            '<div class="book" style="height:20px;background:#8a5adc"></div>' +
+            '<div class="book" style="height:22px;background:#da4a8a"></div>' +
+          '</div>' +
+          '<div class="shelf-divider"></div>' +
+          '<div class="shelf-row">' +
+            '<div class="book" style="height:20px;background:#3aaa6a"></div>' +
+            '<div class="book" style="height:16px;background:#ca9a2a"></div>' +
+            '<div class="book" style="height:24px;background:#5a5a7a"></div>' +
+            '<div class="book" style="height:18px;background:#ea6a4a"></div>' +
+            '<div class="book" style="height:22px;background:#3a6aaa"></div>' +
+          '</div>' +
+          '<div class="shelf-divider"></div>' +
+          '<div class="furniture-label">bookshelf</div>' +
+        '</div>';
+
+      // Filing cabinet
+      leftNav.innerHTML +=
+        '<div class="filing-cabinet">' +
+          '<div class="cabinet-body">' +
+            '<div class="cabinet-drawer"><div class="cabinet-handle"></div></div>' +
+            '<div class="cabinet-drawer"><div class="cabinet-handle"></div></div>' +
+            '<div class="cabinet-drawer"><div class="cabinet-handle"></div></div>' +
+          '</div>' +
+          '<div class="furniture-label">files</div>' +
+        '</div>';
+
       SIDE_NAV_RIGHT.forEach(function(item) {
         rightNav.innerHTML += '<div class="side-link"><div class="side-icon">' + item.icon + '</div><div class="side-label">' + item.label + '</div></div>';
       });
+
+      // Water cooler
+      rightNav.innerHTML +=
+        '<div class="water-cooler">' +
+          '<div class="cooler-jug"></div>' +
+          '<div class="cooler-body">' +
+            '<div class="cooler-tap hot"></div>' +
+            '<div class="cooler-tap cold"></div>' +
+          '</div>' +
+          '<div class="cooler-stand"></div>' +
+          '<div class="furniture-label">water</div>' +
+        '</div>';
 
       // Desk area
       var deskArea = document.getElementById('deskArea');
