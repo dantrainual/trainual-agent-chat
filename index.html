@@ -110,6 +110,133 @@
       opacity: 0.5;
     }
 
+    /* ════════════════════════════════
+       POPUP CONTENT WINDOWS
+       ════════════════════════════════ */
+    .popup-body {
+      flex: 1; overflow-y: auto; padding: 28px 32px;
+      background: #ece5d5;
+      font-family: 'DM Sans', sans-serif; color: #3a2a1a; line-height: 1.65;
+    }
+    .popup-body::-webkit-scrollbar { width: 6px; }
+    .popup-body::-webkit-scrollbar-track { background: transparent; }
+    .popup-body::-webkit-scrollbar-thumb { background: #c8bc9a; border-radius: 3px; }
+
+    .popup-body h2 {
+      font-family: 'Press Start 2P', monospace; font-size: 13px; color: #4a3a2a;
+      margin: 0 0 16px; line-height: 1.6;
+    }
+    .popup-body h3 {
+      font-family: 'Press Start 2P', monospace; font-size: 9px; color: #6a5a3a;
+      margin: 24px 0 10px; letter-spacing: 0.5px;
+    }
+    .popup-body p { margin: 0 0 14px; font-size: 14px; }
+    .popup-body .section { margin-bottom: 28px; }
+    .popup-body .divider {
+      height: 2px; background: #c8bc9a; margin: 24px 0; border: none;
+    }
+    .popup-body .tip-box {
+      background: #d8d0b8; border: 2px solid #c8bc9a; border-radius: 8px;
+      padding: 16px 18px; margin: 12px 0; font-size: 13px;
+    }
+    .popup-body .tip-box .tip-emoji { font-size: 18px; margin-right: 8px; }
+
+    /* Agent roster cards */
+    .roster-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .roster-card {
+      background: #d8d0b8; border: 2px solid #c8bc9a; border-radius: 10px;
+      padding: 16px; text-align: center; cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .roster-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: var(--card-color); }
+    .roster-card .roster-emoji { font-size: 28px; margin-bottom: 8px; }
+    .roster-card .roster-name {
+      font-family: 'Press Start 2P', monospace; font-size: 9px; margin-bottom: 4px;
+    }
+    .roster-card .roster-role { font-size: 11px; color: #7a6a5a; margin-bottom: 8px; }
+    .roster-card .roster-desc { font-size: 12px; color: #5a4a3a; line-height: 1.5; }
+    .roster-card .roster-status {
+      display: inline-block; font-size: 9px; padding: 2px 8px; border-radius: 10px;
+      margin-top: 8px; font-family: 'Press Start 2P', monospace;
+    }
+    .roster-card .roster-status.online { background: rgba(42,138,90,0.15); color: #2a8a5a; }
+    .roster-card .roster-status.offline { background: rgba(138,122,90,0.15); color: #8a7a5a; }
+
+    /* Slot machine */
+    .slot-machine {
+      text-align: center; padding: 24px 0;
+    }
+    .slot-reels {
+      display: flex; gap: 12px; justify-content: center; margin: 24px 0;
+    }
+    .slot-reel {
+      width: 72px; height: 72px; background: #3a3a52; border: 3px solid #4a4a62;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 36px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.1s;
+    }
+    .slot-reel.spinning {
+      animation: slotSpin 0.15s linear infinite;
+    }
+    @keyframes slotSpin {
+      0% { transform: translateY(-3px); }
+      50% { transform: translateY(3px); }
+      100% { transform: translateY(-3px); }
+    }
+    .slot-pull-btn {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      padding: 12px 28px; background: #c44a3a; color: #fff;
+      border: 2px solid #a83a2a; border-radius: 8px; cursor: pointer;
+      box-shadow: 0 3px 0 #8a2a1a; transition: all 0.1s;
+    }
+    .slot-pull-btn:hover { background: #b44030; }
+    .slot-pull-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #8a2a1a; }
+    .slot-pull-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .slot-result {
+      margin-top: 20px; padding: 16px; background: #d8d0b8;
+      border: 2px solid #c8bc9a; border-radius: 10px;
+      font-size: 14px; line-height: 1.6; min-height: 60px;
+    }
+    .slot-result .fact-label {
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      color: #8a7a5a; margin-bottom: 8px;
+    }
+
+    /* Lo-fi radio */
+    .radio-toggle {
+      position: relative; cursor: pointer;
+    }
+    .radio-toggle .radio-waves {
+      position: absolute; top: -2px; right: -2px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #4aeaca; display: none;
+      animation: radioPulse 1.5s ease infinite;
+    }
+    .radio-toggle.playing .radio-waves { display: block; }
+    @keyframes radioPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    /* Mini-game */
+    .game-container { text-align: center; }
+    .game-canvas {
+      background: #1a1a2e; border: 3px solid #3a3a52; border-radius: 8px;
+      display: block; margin: 16px auto;
+      image-rendering: pixelated;
+    }
+    .game-score {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: #4a3a2a; margin: 8px 0;
+    }
+    .game-start-btn {
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      padding: 10px 24px; background: #3a3a52; color: #e8e0d0;
+      border: 2px solid #4a4a62; border-radius: 6px; cursor: pointer;
+      box-shadow: 0 2px 0 #2a2a3f;
+    }
+    .game-start-btn:hover { background: #4a4a62; }
+
     .browser-toolbar {
       display: flex; align-items: center;
       padding: 12px 16px;
@@ -1708,6 +1835,9 @@
       Object.keys(openWindows).forEach(function(id) {
         openWindows[id].el.classList.remove('focused');
       });
+      Object.keys(popupWindows).forEach(function(id) {
+        popupWindows[id].el.classList.remove('focused');
+      });
       var win = openWindows[agentId];
       if (!win) return;
       win.el.style.zIndex = ++windowZIndex;
@@ -2032,21 +2162,570 @@
     };
 
     // Side navigation items
+    // ═══════════════════════════════════════
+    // SIDEBAR NAV ITEMS (with actions)
+    // ═══════════════════════════════════════
     var SIDE_NAV_LEFT = [
-      { icon: '\uD83C\uDFE0', label: 'Home' },
-      { icon: '\uD83D\uDCD6', label: 'User Guide' },
-      { icon: '\uD83D\uDCCB', label: 'SOPs' },
-      { icon: '\uD83D\uDDE3\uFE0F', label: 'Talk to\nHuman' },
-      { icon: '\u2699\uFE0F', label: 'Settings' }
+      { icon: '\uD83C\uDFE0', label: 'Home', action: function() { window.open('https://trainual.com', '_blank'); } },
+      { icon: '\uD83D\uDCD6', label: 'User\nGuide', action: function() { openUserGuide(); } },
+      { icon: '\uD83C\uDFB0', label: 'Slot\nMachine', action: function() { openSlotMachine(); } },
+      { icon: '\uD83D\uDDE3\uFE0F', label: 'Talk to\nHuman', action: function() { window.open('https://trainual.slack.com', '_blank'); } }
     ];
 
     var SIDE_NAV_RIGHT = [
-      { icon: '\uD83D\uDCDD', label: 'Changelog' },
-      { icon: '\uD83D\uDCD3', label: 'Handbook' },
-      { icon: '\uD83C\uDF93', label: 'Training' },
-      { icon: '\uD83D\uDCC8', label: 'Analytics' },
-      { icon: '\u2753', label: 'Help' }
+      { icon: '\uD83D\uDCCB', label: 'Agent\nRoster', action: function() { openAgentRoster(); } },
+      { icon: '\uD83D\uDCA1', label: 'Tip of\nthe Day', action: function() { openTipOfDay(); } },
+      { icon: '\uD83C\uDFB5', label: 'Lo-fi\nRadio', action: function() { toggleRadio(); }, radioToggle: true },
+      { icon: '\uD83D\uDD79\uFE0F', label: 'Mini\nGame', action: function() { openMiniGame(); } }
     ];
+
+    // ═══════════════════════════════════════
+    // POPUP WINDOW SYSTEM
+    // ═══════════════════════════════════════
+    var popupWindows = {};
+    var popupCascade = 0;
+
+    function openPopup(id, title, emoji, color, contentFn) {
+      if (popupWindows[id]) {
+        popupWindows[id].el.style.zIndex = ++windowZIndex;
+        return popupWindows[id];
+      }
+
+      var baseX = Math.max(80, (window.innerWidth - 480) / 2 - 60);
+      var baseY = Math.max(60, (window.innerHeight - 440) / 2 - 40);
+      var x = baseX + (popupCascade % 4) * CASCADE_OFFSET;
+      var y = baseY + (popupCascade % 4) * CASCADE_OFFSET;
+      popupCascade++;
+
+      var el = document.createElement('div');
+      el.className = 'browser-window focused';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.width = '480px';
+      el.style.height = '440px';
+      el.style.zIndex = ++windowZIndex;
+      el.style.setProperty('--agent-color', color);
+
+      el.innerHTML =
+        '<div class="win-accent" style="background:' + color + '"></div>' +
+        '<div class="browser-toolbar">' +
+          '<div class="browser-dots">' +
+            '<button class="browser-dot red" title="Close"></button>' +
+            '<button class="browser-dot yellow" title="Minimize"></button>' +
+            '<button class="browser-dot green" title="Maximize"></button>' +
+          '</div>' +
+          '<div class="toolbar-agent-badge" style="background:' + color + '">' +
+            '<span class="badge-emoji">' + emoji + '</span>' +
+            escapeHtml(title) +
+          '</div>' +
+          '<div class="browser-url">' +
+            '<span class="browser-url-lock">&#x1F512;</span>' +
+            '<span class="browser-url-text">trainual-hub.app/' + id + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="popup-body" id="popup-' + id + '"></div>' +
+        '<div class="win-resize"></div>';
+
+      document.getElementById('windowContainer').appendChild(el);
+
+      var toolbar = el.querySelector('.browser-toolbar');
+      var closeBtn = el.querySelector('.browser-dot.red');
+      var minBtn = el.querySelector('.browser-dot.yellow');
+      var maxBtn = el.querySelector('.browser-dot.green');
+      var resizeHandle = el.querySelector('.win-resize');
+
+      // Focus
+      el.addEventListener('mousedown', function() {
+        Object.keys(popupWindows).forEach(function(k) { popupWindows[k].el.classList.remove('focused'); });
+        Object.keys(openWindows).forEach(function(k) { openWindows[k].el.classList.remove('focused'); });
+        el.style.zIndex = ++windowZIndex;
+        el.classList.add('focused');
+      });
+
+      // Close
+      closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        el.classList.add('closing');
+        el.classList.remove('focused');
+        setTimeout(function() { el.remove(); delete popupWindows[id]; }, 200);
+      });
+
+      // Minimize
+      minBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+      });
+
+      // Maximize
+      maxBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (el.dataset.maximized === 'true') {
+          el.style.left = el.dataset.restoreX;
+          el.style.top = el.dataset.restoreY;
+          el.style.width = el.dataset.restoreW;
+          el.style.height = el.dataset.restoreH;
+          el.dataset.maximized = 'false';
+        } else {
+          el.dataset.restoreX = el.style.left;
+          el.dataset.restoreY = el.style.top;
+          el.dataset.restoreW = el.style.width;
+          el.dataset.restoreH = el.style.height;
+          el.style.left = '20px'; el.style.top = '20px';
+          el.style.width = (window.innerWidth - 40) + 'px';
+          el.style.height = (window.innerHeight - 40) + 'px';
+          el.dataset.maximized = 'true';
+        }
+      });
+
+      // Drag
+      toolbar.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.browser-dot') || e.target.closest('.browser-url')) return;
+        e.preventDefault();
+        var rect = el.getBoundingClientRect();
+        var offX = e.clientX - rect.left, offY = e.clientY - rect.top;
+        toolbar.classList.add('dragging');
+        function onMove(e) {
+          el.style.left = Math.max(0, e.clientX - offX) + 'px';
+          el.style.top = Math.max(0, e.clientY - offY) + 'px';
+          if (el.dataset.maximized === 'true') {
+            el.style.width = el.dataset.restoreW; el.style.height = el.dataset.restoreH;
+            el.dataset.maximized = 'false';
+          }
+        }
+        function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); toolbar.classList.remove('dragging'); }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      // Resize
+      resizeHandle.addEventListener('mousedown', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        var startX = e.clientX, startY = e.clientY;
+        var startW = el.offsetWidth, startH = el.offsetHeight;
+        function onMove(e) {
+          el.style.width = Math.max(340, startW + (e.clientX - startX)) + 'px';
+          el.style.height = Math.max(280, startH + (e.clientY - startY)) + 'px';
+        }
+        function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      popupWindows[id] = { el: el };
+      contentFn(el.querySelector('#popup-' + id));
+      return popupWindows[id];
+    }
+
+    // ═══════════════════════════════════════
+    // FEATURE: USER GUIDE
+    // ═══════════════════════════════════════
+    function openUserGuide() {
+      openPopup('guide', 'User Guide', '\uD83D\uDCD6', '#6a5adc', function(body) {
+        body.innerHTML =
+          '<h2>\uD83D\uDCD6 Agent Hub User Guide</h2>' +
+          '<div class="section">' +
+            '<h3>What is the Agent Hub?</h3>' +
+            '<p>The Agent Hub is your home base for Trainual\'s AI-powered industry experts. Each agent is a specialist in a specific vertical — trained on real operational knowledge, industry language, and competitive intelligence.</p>' +
+            '<p>Use these agents to get fluent fast in a new vertical, create authentic marketing content, or understand how target customers actually run their businesses.</p>' +
+          '</div>' +
+          '<hr class="divider">' +
+          '<div class="section">' +
+            '<h3>Meet Your Agents</h3>' +
+            '<div class="tip-box"><span class="tip-emoji">\uD83D\uDD28</span><strong>Forge</strong> — Commercial Construction. Knows GCs, subs, OSHA, toolbox talks, and how a 100-person contractor actually operates day to day.</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\u2696\uFE0F</span><strong>Lex</strong> — Personal Injury Law. Knows intake, case management, liens, and why paralegal turnover is the #1 problem at PI firms.</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\uD83D\uDD27</span><strong>Flux</strong> — HVAC & Plumbing. Knows dispatch, flat-rate pricing, EPA 608, and the tech shortage crisis reshaping home services.</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\uD83C\uDFE5</span><strong>Pulse</strong> — Ambulatory Health. Knows HIPAA, credentialing, MA onboarding, and what happens when a 3-location clinic grows to 10.</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\uD83D\uDD0D</span><strong>Scout</strong> — Product Feedback. Aggregates and surfaces themes from customer feature requests and feedback.</div>' +
+          '</div>' +
+          '<hr class="divider">' +
+          '<div class="section">' +
+            '<h3>How to Use an Agent</h3>' +
+            '<p><strong>1. Click an agent</strong> at their desk to open a chat window. You can open multiple agents at once — drag, resize, and arrange them however you like.</p>' +
+            '<p><strong>2. Ask anything</strong> about their vertical. Good starting prompts:</p>' +
+            '<div class="tip-box"><span class="tip-emoji">\uD83D\uDCA1</span>"Explain how [role] works at a [size] company"<br>"What software do they already use?"<br>"Write a blog post about [pain point]"<br>"How is Trainual different from [competitor]?"</div>' +
+            '<p><strong>3. Manage sessions</strong> by clicking the menu icon (\u2630) to open the sidebar. Start new chats, switch between sessions, or delete old ones.</p>' +
+            '<p><strong>4. Copy responses</strong> by hovering over any agent message and clicking the copy icon.</p>' +
+          '</div>' +
+          '<hr class="divider">' +
+          '<div class="section">' +
+            '<h3>Window Controls</h3>' +
+            '<p>\uD83D\uDD34 <strong>Red</strong> — Close the window</p>' +
+            '<p>\uD83D\uDFE1 <strong>Yellow</strong> — Minimize (hide/show)</p>' +
+            '<p>\uD83D\uDFE2 <strong>Green</strong> — Maximize / Restore</p>' +
+            '<p>Drag the title bar to move. Drag the bottom-right corner to resize.</p>' +
+          '</div>' +
+          '<hr class="divider">' +
+          '<div class="section">' +
+            '<h3>Tips for Best Results</h3>' +
+            '<div class="tip-box"><span class="tip-emoji">\u2705</span>Be specific about company size — a 30-person GC operates very differently from a 200-person one.</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\u2705</span>Ask for content in the customer\'s language, not Trainual\'s marketing language.</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\u2705</span>Use competitive intel for positioning — ask "How is Trainual different from X?" not "Why is Trainual better?"</div>' +
+            '<div class="tip-box"><span class="tip-emoji">\u2705</span>Open multiple agents to compare how different verticals handle the same problem (e.g., onboarding).</div>' +
+          '</div>' +
+          '<hr class="divider">' +
+          '<div class="section">' +
+            '<h3>Questions or Feedback?</h3>' +
+            '<p>Click the \uD83D\uDDE3\uFE0F Talk to Human button in the left sidebar to reach the team. We\'re always iterating on these agents — your feedback makes them better.</p>' +
+          '</div>';
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // FEATURE: AGENT ROSTER
+    // ═══════════════════════════════════════
+    function openAgentRoster() {
+      openPopup('roster', 'Agent Roster', '\uD83D\uDCCB', '#8a6a3a', function(body) {
+        var html = '<h2>\uD83D\uDCCB Agent Roster</h2><p>Click any agent to open their chat window.</p><div class="roster-grid">';
+        var allAgents = [];
+        AGENTS.forEach(function(cat) { cat.agents.forEach(function(a) { allAgents.push(a); }); });
+        var pc = PIXEL_CHARS;
+        allAgents.forEach(function(a) {
+          var color = (pc[a.id] || pc.scout).color;
+          var isOnline = a.webhook !== '';
+          html += '<div class="roster-card" data-agent="' + a.id + '" style="--card-color:' + color + '">' +
+            '<div class="roster-emoji">' + a.emoji + '</div>' +
+            '<div class="roster-name" style="color:' + color + '">' + escapeHtml(a.name) + '</div>' +
+            '<div class="roster-role">' + escapeHtml(a.role) + '</div>' +
+            '<div class="roster-desc">' + escapeHtml(a.desc) + '</div>' +
+            '<div class="roster-status ' + (isOnline ? 'online' : 'offline') + '">' + (isOnline ? '\u25CF Online' : '\u25CB Coming soon') + '</div>' +
+          '</div>';
+        });
+        html += '</div>';
+        body.innerHTML = html;
+        body.querySelectorAll('.roster-card').forEach(function(card) {
+          card.addEventListener('click', function() {
+            var agentId = card.dataset.agent;
+            if (agentMap[agentId] && agentMap[agentId].webhook) showChat(agentId);
+          });
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // FEATURE: SLOT MACHINE
+    // ═══════════════════════════════════════
+    var SLOT_FACTS = [
+      { emoji: '\uD83D\uDD28', vertical: 'Construction', fact: 'OSHA\'s "Fatal Four" — falls, struck-by, electrocution, and caught-in/between — account for over 60% of construction worker deaths every year.' },
+      { emoji: '\uD83D\uDD28', vertical: 'Construction', fact: 'The average commercial construction company spends $1,500-$2,500 per employee annually on safety training alone.' },
+      { emoji: '\uD83D\uDD28', vertical: 'Construction', fact: 'A superintendent on a $20M project manages 80-150 workers daily, yet most have zero formal management training.' },
+      { emoji: '\uD83D\uDD28', vertical: 'Construction', fact: 'Toolbox talks take just 10-15 minutes but can reduce jobsite incidents by up to 50% when done consistently.' },
+      { emoji: '\uD83D\uDD28', vertical: 'Construction', fact: 'Construction firms lose an estimated 35% of project time to rework caused by miscommunication and lack of documented processes.' },
+      { emoji: '\u2696\uFE0F', vertical: 'PI Law', fact: 'The average PI firm converts only 25-35% of inbound leads. Top performers hit 50%+ by responding in under 5 minutes.' },
+      { emoji: '\u2696\uFE0F', vertical: 'PI Law', fact: 'Paralegal turnover at PI firms averages 25-30% annually — higher than almost any other legal specialty.' },
+      { emoji: '\u2696\uFE0F', vertical: 'PI Law', fact: 'A single missed statute of limitations can result in a malpractice claim worth the entire case value — sometimes millions.' },
+      { emoji: '\u2696\uFE0F', vertical: 'PI Law', fact: 'PI firms running on contingency fees typically spend $3,000-$10,000 per signed case in marketing costs before seeing any revenue.' },
+      { emoji: '\u2696\uFE0F', vertical: 'PI Law', fact: 'The average PI case takes 12-18 months to settle. During that time, the firm has zero revenue from that case but ongoing costs.' },
+      { emoji: '\uD83D\uDD27', vertical: 'HVAC', fact: 'The HVAC industry will need 115,000+ new technicians by 2026. The average tech is 55 years old and nearing retirement.' },
+      { emoji: '\uD83D\uDD27', vertical: 'HVAC', fact: 'A top-performing HVAC tech generates $400,000-$600,000 in annual revenue. Losing one costs a company 3-6 months of ramp-up time.' },
+      { emoji: '\uD83D\uDD27', vertical: 'HVAC', fact: 'EPA Section 608 violations carry fines of up to $44,539 per day. Yet many small shops let new hires work on refrigerant before certification.' },
+      { emoji: '\uD83D\uDD27', vertical: 'HVAC', fact: 'Maintenance agreements (PMAs) have 80%+ retention rates and provide predictable recurring revenue — but only 30% of companies actively sell them.' },
+      { emoji: '\uD83D\uDD27', vertical: 'HVAC', fact: 'The average service callback rate in HVAC is 3-5%. Each callback costs the company $250-$400 in lost revenue and truck rolls.' },
+      { emoji: '\uD83C\uDFE5', vertical: 'Health', fact: 'HIPAA violation penalties range from $137 to $68,928 per incident. Repeat violations can trigger DOJ criminal referrals.' },
+      { emoji: '\uD83C\uDFE5', vertical: 'Health', fact: 'The average medical assistant takes 90 days to reach full productivity. Clinics without structured onboarding see 40%+ first-year turnover.' },
+      { emoji: '\uD83C\uDFE5', vertical: 'Health', fact: 'Provider credentialing takes 90-120 days. A single missing document can delay a new physician from seeing patients for weeks.' },
+      { emoji: '\uD83C\uDFE5', vertical: 'Health', fact: 'Multi-location clinics growing from 3 to 10 sites report a 60% increase in compliance incidents without standardized training.' },
+      { emoji: '\uD83C\uDFE5', vertical: 'Health', fact: 'Clean claim rates below 95% can cost a 10-provider practice over $200,000 annually in denied revenue and rework.' }
+    ];
+
+    function openSlotMachine() {
+      openPopup('slots', 'Slot Machine', '\uD83C\uDFB0', '#c44a3a', function(body) {
+        var emojis = ['\uD83D\uDD28', '\u2696\uFE0F', '\uD83D\uDD27', '\uD83C\uDFE5'];
+        body.innerHTML =
+          '<div class="slot-machine">' +
+            '<h2>\uD83C\uDFB0 Industry Fact Machine</h2>' +
+            '<p>Pull the lever for a random industry fact!</p>' +
+            '<div class="slot-reels">' +
+              '<div class="slot-reel" id="reel1">\uD83D\uDD28</div>' +
+              '<div class="slot-reel" id="reel2">\u2696\uFE0F</div>' +
+              '<div class="slot-reel" id="reel3">\uD83D\uDD27</div>' +
+            '</div>' +
+            '<button class="slot-pull-btn" id="slotPull">\u25B6 PULL LEVER</button>' +
+            '<div class="slot-result" id="slotResult">' +
+              '<div class="fact-label">YOUR FACT</div>' +
+              'Hit the lever to learn something new about your verticals!' +
+            '</div>' +
+          '</div>';
+
+        var reels = [body.querySelector('#reel1'), body.querySelector('#reel2'), body.querySelector('#reel3')];
+        var pullBtn = body.querySelector('#slotPull');
+        var result = body.querySelector('#slotResult');
+        var spinning = false;
+
+        pullBtn.addEventListener('click', function() {
+          if (spinning) return;
+          spinning = true;
+          pullBtn.disabled = true;
+          pullBtn.textContent = 'SPINNING...';
+          result.innerHTML = '<div class="fact-label">SPINNING...</div>\uD83C\uDFB2';
+
+          reels.forEach(function(r) { r.classList.add('spinning'); });
+
+          var intervals = reels.map(function(r) {
+            return setInterval(function() {
+              r.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            }, 80);
+          });
+
+          // Stop reels one by one
+          setTimeout(function() {
+            clearInterval(intervals[0]);
+            reels[0].classList.remove('spinning');
+          }, 600);
+          setTimeout(function() {
+            clearInterval(intervals[1]);
+            reels[1].classList.remove('spinning');
+          }, 1000);
+          setTimeout(function() {
+            clearInterval(intervals[2]);
+            reels[2].classList.remove('spinning');
+
+            // Pick random fact
+            var fact = SLOT_FACTS[Math.floor(Math.random() * SLOT_FACTS.length)];
+            reels[0].textContent = fact.emoji;
+            reels[1].textContent = fact.emoji;
+            reels[2].textContent = fact.emoji;
+
+            result.innerHTML = '<div class="fact-label">' + escapeHtml(fact.vertical).toUpperCase() + ' FACT</div>' + escapeHtml(fact.fact);
+            pullBtn.disabled = false;
+            pullBtn.textContent = '\u25B6 PULL AGAIN';
+            spinning = false;
+          }, 1400);
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // FEATURE: TIP OF THE DAY
+    // ═══════════════════════════════════════
+    var DAILY_TIPS = [
+      { emoji: '\uD83C\uDFAF', tip: 'Ask agents to explain an industry concept "like I\'m pitching to a VP." They\'ll adjust the detail level and business framing automatically.' },
+      { emoji: '\uD83D\uDD0D', tip: 'Use Forge and Flux together to compare how construction and HVAC handle seasonal hiring. The parallels might surprise you.' },
+      { emoji: '\u270D\uFE0F', tip: 'When writing vertical content, ask the agent: "What words would this customer actually use?" — not "What should Trainual say?"' },
+      { emoji: '\uD83C\uDFC6', tip: 'Ask Lex "What keeps a PI managing partner up at night?" for instant empathy-building context before writing any PI content.' },
+      { emoji: '\uD83D\uDCA1', tip: 'Open two agents side by side and ask both: "What does onboarding look like in your industry?" — great for cross-vertical content.' },
+      { emoji: '\uD83D\uDCCB', tip: 'Use agents for competitive intel: "How is Trainual different from [competitor]?" gets you honest, nuanced positioning — not generic praise.' },
+      { emoji: '\uD83D\uDE80', tip: 'Ask Pulse about HIPAA training requirements — it\'s one of the strongest triggers for healthcare companies to buy Trainual.' },
+      { emoji: '\uD83D\uDD27', tip: 'Flux knows the tech shortage crisis inside and out. Ask it to write a "tech ramp-up time" blog post — it\'s HVAC\'s biggest pain point.' },
+      { emoji: '\uD83D\uDCC8', tip: 'Want to understand deal sizes? Ask any agent: "Walk me through the org chart of a [50/100/200]-person company in your vertical."' },
+      { emoji: '\uD83C\uDFA8', tip: 'Ask agents to write in specific formats: LinkedIn posts, email sequences, one-pagers, blog intros. They adapt tone to the medium.' },
+      { emoji: '\uD83E\uDD1D', tip: 'The agents know what Trainual does and doesn\'t do. If a competitor is genuinely better at something, they\'ll tell you — use that honesty in content.' },
+      { emoji: '\uD83D\uDDD3\uFE0F', tip: 'Construction is seasonal. Ask Forge about spring ramp-up training needs — great timing for Q1/Q2 marketing campaigns.' }
+    ];
+
+    function openTipOfDay() {
+      openPopup('tip', 'Tip of the Day', '\uD83D\uDCA1', '#ca9a2a', function(body) {
+        var dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+        var todayTip = DAILY_TIPS[dayOfYear % DAILY_TIPS.length];
+        var html = '<h2>\uD83D\uDCA1 Tip of the Day</h2>' +
+          '<div class="tip-box" style="font-size:15px;line-height:1.7;padding:20px 22px">' +
+            '<span class="tip-emoji" style="font-size:24px">' + todayTip.emoji + '</span><br><br>' +
+            escapeHtml(todayTip.tip) +
+          '</div>' +
+          '<hr class="divider">' +
+          '<h3>More Tips</h3>';
+        DAILY_TIPS.forEach(function(t, i) {
+          if (i === dayOfYear % DAILY_TIPS.length) return;
+          html += '<div class="tip-box"><span class="tip-emoji">' + t.emoji + '</span>' + escapeHtml(t.tip) + '</div>';
+        });
+        body.innerHTML = html;
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // FEATURE: LO-FI RADIO
+    // ═══════════════════════════════════════
+    var radioAudio = null;
+    var radioPlaying = false;
+
+    function toggleRadio() {
+      if (!radioAudio) {
+        radioAudio = new Audio();
+        radioAudio.crossOrigin = 'anonymous';
+        // Free lo-fi stream
+        radioAudio.src = 'https://streams.fluxfm.de/Chillhop/mp3-128/streams.fluxfm.de/';
+        radioAudio.loop = false;
+        radioAudio.volume = 0.3;
+      }
+      var radioLink = document.querySelector('.radio-toggle');
+      if (radioPlaying) {
+        radioAudio.pause();
+        radioPlaying = false;
+        if (radioLink) radioLink.classList.remove('playing');
+      } else {
+        radioAudio.play().catch(function() {
+          // If stream fails, use Tone.js-style oscillator white noise as fallback ambiance
+          console.log('Radio stream unavailable');
+        });
+        radioPlaying = true;
+        if (radioLink) radioLink.classList.add('playing');
+      }
+    }
+
+    // ═══════════════════════════════════════
+    // FEATURE: MINI-GAME (Trainual Collect)
+    // ═══════════════════════════════════════
+    function openMiniGame() {
+      openPopup('game', 'Mini Game', '\uD83D\uDD79\uFE0F', '#3a7aea', function(body) {
+        body.innerHTML =
+          '<div class="game-container">' +
+            '<h2>\uD83D\uDD79\uFE0F Trainual Runner</h2>' +
+            '<p>Jump over obstacles to collect training docs!<br>Press <strong>Space</strong> or <strong>tap</strong> to jump.</p>' +
+            '<canvas class="game-canvas" id="gameCanvas" width="400" height="200"></canvas>' +
+            '<div class="game-score" id="gameScoreDisplay">Score: 0 | Best: 0</div>' +
+            '<button class="game-start-btn" id="gameStartBtn">\u25B6 START GAME</button>' +
+          '</div>';
+
+        var canvas = body.querySelector('#gameCanvas');
+        var ctx = canvas.getContext('2d');
+        var scoreEl = body.querySelector('#gameScoreDisplay');
+        var startBtn = body.querySelector('#gameStartBtn');
+        var running = false, score = 0, bestScore = 0;
+        var playerY = 160, playerVy = 0, isJumping = false;
+        var obstacles = [], collectibles = [], frameCount = 0;
+        var GRAVITY = 0.6, JUMP_FORCE = -10, GROUND = 160, SPEED = 3;
+
+        function drawPixelRect(x, y, w, h, color) {
+          ctx.fillStyle = color;
+          ctx.fillRect(Math.round(x), Math.round(y), w, h);
+        }
+
+        function spawnObstacle() {
+          obstacles.push({ x: 420, y: GROUND, w: 16, h: 24 + Math.random() * 16 });
+        }
+
+        function spawnCollectible() {
+          collectibles.push({ x: 420, y: GROUND - 30 - Math.random() * 40, collected: false });
+        }
+
+        function reset() {
+          playerY = GROUND; playerVy = 0; isJumping = false;
+          obstacles = []; collectibles = []; frameCount = 0; score = 0;
+          SPEED = 3;
+        }
+
+        function update() {
+          frameCount++;
+          if (frameCount % 90 === 0) spawnObstacle();
+          if (frameCount % 60 === 0) spawnCollectible();
+          if (frameCount % 300 === 0) SPEED = Math.min(6, SPEED + 0.3);
+
+          // Player physics
+          playerVy += GRAVITY;
+          playerY += playerVy;
+          if (playerY >= GROUND) { playerY = GROUND; playerVy = 0; isJumping = false; }
+
+          // Move obstacles
+          obstacles.forEach(function(o) { o.x -= SPEED; });
+          obstacles = obstacles.filter(function(o) { return o.x > -20; });
+
+          // Move collectibles
+          collectibles.forEach(function(c) { c.x -= SPEED; });
+          collectibles = collectibles.filter(function(c) { return c.x > -20; });
+
+          // Collision detection
+          for (var i = 0; i < obstacles.length; i++) {
+            var o = obstacles[i];
+            if (20 < o.x + o.w && 20 + 16 > o.x && playerY < o.y + 4 && playerY + 20 > o.y - o.h + 4) {
+              running = false;
+              if (score > bestScore) bestScore = score;
+              scoreEl.textContent = 'Game Over! Score: ' + score + ' | Best: ' + bestScore;
+              startBtn.textContent = '\u25B6 PLAY AGAIN';
+              startBtn.style.display = 'inline-block';
+              return;
+            }
+          }
+
+          // Collect items
+          collectibles.forEach(function(c) {
+            if (!c.collected && Math.abs(24 - c.x) < 18 && Math.abs(playerY - c.y) < 18) {
+              c.collected = true;
+              score += 10;
+            }
+          });
+
+          score += 1;
+          scoreEl.textContent = 'Score: ' + score + ' | Best: ' + bestScore;
+        }
+
+        function draw() {
+          // Sky
+          ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0, 0, 400, 200);
+
+          // Stars
+          ctx.fillStyle = '#4a4a6a';
+          [[30,20],[80,40],[150,15],[200,50],[280,25],[350,35],[120,60]].forEach(function(s) {
+            ctx.fillRect(s[0], s[1], 2, 2);
+          });
+
+          // Ground
+          drawPixelRect(0, 180, 400, 20, '#3a3a52');
+          for (var g = 0; g < 400; g += 8) drawPixelRect(g, 180, 8, 2, '#4a4a62');
+
+          // Player (little pixel person)
+          var py = playerY;
+          drawPixelRect(20, py - 16, 12, 12, '#eaa02a'); // head
+          drawPixelRect(18, py - 4, 16, 12, '#3a3a52');  // body
+          drawPixelRect(18, py + 8, 6, 8, '#5a4a3a');    // left leg
+          drawPixelRect(28, py + 8, 6, 8, '#5a4a3a');    // right leg
+          drawPixelRect(22, py - 14, 3, 3, '#fff');       // eye
+          drawPixelRect(28, py - 14, 3, 3, '#fff');       // eye
+
+          // Obstacles (pixel cones)
+          ctx.fillStyle = '#c44a3a';
+          obstacles.forEach(function(o) {
+            ctx.beginPath();
+            ctx.moveTo(o.x + o.w / 2, o.y - o.h);
+            ctx.lineTo(o.x + o.w, o.y + 4);
+            ctx.lineTo(o.x, o.y + 4);
+            ctx.fill();
+            drawPixelRect(o.x - 2, o.y + 2, o.w + 4, 4, '#a83a2a');
+          });
+
+          // Collectibles (floating docs)
+          collectibles.forEach(function(c) {
+            if (c.collected) return;
+            drawPixelRect(c.x, c.y, 12, 14, '#f5f0e0');
+            drawPixelRect(c.x + 2, c.y + 3, 8, 1, '#aaa');
+            drawPixelRect(c.x + 2, c.y + 6, 6, 1, '#aaa');
+            drawPixelRect(c.x + 2, c.y + 9, 7, 1, '#aaa');
+          });
+        }
+
+        function gameLoop() {
+          if (!running) return;
+          update();
+          draw();
+          requestAnimationFrame(gameLoop);
+        }
+
+        function jump() {
+          if (!isJumping && running) {
+            playerVy = JUMP_FORCE;
+            isJumping = true;
+          }
+        }
+
+        startBtn.addEventListener('click', function() {
+          reset();
+          running = true;
+          startBtn.style.display = 'none';
+          gameLoop();
+        });
+
+        // Jump controls
+        document.addEventListener('keydown', function(e) {
+          if (e.code === 'Space' && running) { e.preventDefault(); jump(); }
+        });
+        canvas.addEventListener('click', jump);
+        canvas.addEventListener('touchstart', function(e) { e.preventDefault(); jump(); });
+
+        // Draw initial state
+        ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0, 0, 400, 200);
+        drawPixelRect(0, 180, 400, 20, '#3a3a52');
+        ctx.fillStyle = '#6a6a8a'; ctx.font = '12px "Press Start 2P"';
+        ctx.fillText('Press START', 130, 100);
+      });
+    }
 
     // ═══════════════════════════════════════
     // RENDERING — Pixel Workroom Hub
@@ -2059,7 +2738,12 @@
       rightNav.innerHTML = '';
 
       SIDE_NAV_LEFT.forEach(function(item) {
-        leftNav.innerHTML += '<div class="side-link"><div class="side-icon">' + item.icon + '</div><div class="side-label">' + item.label + '</div></div>';
+        var link = document.createElement('div');
+        link.className = 'side-link';
+        link.innerHTML = '<div class="side-icon">' + item.icon + '</div><div class="side-label">' + item.label + '</div>';
+        if (item.action) link.addEventListener('click', item.action);
+        if (item.radioToggle) link.classList.add('radio-toggle');
+        leftNav.appendChild(link);
       });
 
       // Bookshelf
@@ -2098,7 +2782,12 @@
         '</div>';
 
       SIDE_NAV_RIGHT.forEach(function(item) {
-        rightNav.innerHTML += '<div class="side-link"><div class="side-icon">' + item.icon + '</div><div class="side-label">' + item.label + '</div></div>';
+        var link = document.createElement('div');
+        link.className = 'side-link';
+        if (item.radioToggle) link.classList.add('radio-toggle');
+        link.innerHTML = '<div class="side-icon">' + item.icon + '</div><div class="side-label">' + item.label + '</div>' + (item.radioToggle ? '<div class="radio-waves"></div>' : '');
+        if (item.action) link.addEventListener('click', item.action);
+        rightNav.appendChild(link);
       });
 
       // Water cooler
@@ -2198,13 +2887,22 @@
     // ═══════════════════════════════════════
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-        // Close the topmost focused window
-        var topId = null, topZ = 0;
+        // Close the topmost window (chat or popup)
+        var topId = null, topZ = 0, topType = null;
         Object.keys(openWindows).forEach(function(id) {
           var z = parseInt(openWindows[id].el.style.zIndex) || 0;
-          if (z > topZ) { topZ = z; topId = id; }
+          if (z > topZ) { topZ = z; topId = id; topType = 'chat'; }
         });
-        if (topId) closeWindow(topId);
+        Object.keys(popupWindows).forEach(function(id) {
+          var z = parseInt(popupWindows[id].el.style.zIndex) || 0;
+          if (z > topZ) { topZ = z; topId = id; topType = 'popup'; }
+        });
+        if (topId && topType === 'chat') closeWindow(topId);
+        else if (topId && topType === 'popup') {
+          var pw = popupWindows[topId];
+          pw.el.classList.add('closing');
+          setTimeout(function() { pw.el.remove(); delete popupWindows[topId]; }, 200);
+        }
       }
     });
 
