@@ -58,42 +58,56 @@
     }
 
     /* Chat overlay */
-    .chat-overlay {
+    /* Window container layer */
+    #windowContainer {
       position: fixed; inset: 0; z-index: 500;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.35s ease;
+      pointer-events: none;
     }
 
-    .chat-overlay.open {
-      opacity: 1; pointer-events: auto;
-    }
-
-    .chat-backdrop {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(6px);
-    }
-
-    /* Browser window chrome */
+    /* Floating browser window */
     .browser-window {
-      position: relative; z-index: 1;
-      width: 92vw; max-width: 1080px;
-      height: 85vh; max-height: 800px;
+      position: fixed;
+      width: 580px; height: 500px;
+      min-width: 380px; min-height: 320px;
       background: #f5f5f5;
       border-radius: 12px;
       box-shadow:
-        0 24px 80px rgba(0,0,0,0.35),
-        0 4px 20px rgba(0,0,0,0.2),
-        0 0 0 1px rgba(0,0,0,0.08);
+        0 8px 32px rgba(0,0,0,0.18),
+        0 2px 8px rgba(0,0,0,0.12),
+        0 0 0 1px rgba(0,0,0,0.06);
       display: flex; flex-direction: column;
       overflow: hidden;
-      transform: scale(0.94) translateY(20px);
-      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: auto;
+      opacity: 0; transform: scale(0.92) translateY(12px);
+      animation: winOpen 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+      transition: box-shadow 0.2s ease;
     }
 
-    .chat-overlay.open .browser-window {
-      transform: scale(1) translateY(0);
+    .browser-window.focused {
+      box-shadow:
+        0 16px 56px rgba(0,0,0,0.28),
+        0 4px 16px rgba(0,0,0,0.18),
+        0 0 0 1px rgba(0,0,0,0.1);
+    }
+
+    .browser-window.closing {
+      animation: winClose 0.2s ease forwards;
+    }
+
+    @keyframes winOpen { to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes winClose { to { opacity: 0; transform: scale(0.94) translateY(8px); } }
+
+    /* Resize handle */
+    .win-resize {
+      position: absolute; right: 0; bottom: 0;
+      width: 16px; height: 16px; cursor: nwse-resize;
+      z-index: 2;
+    }
+    .win-resize::after {
+      content: ''; position: absolute; right: 3px; bottom: 3px;
+      width: 8px; height: 8px;
+      border-right: 2px solid #aaa; border-bottom: 2px solid #aaa;
+      opacity: 0.5;
     }
 
     .browser-toolbar {
@@ -102,7 +116,9 @@
       background: #e8e8e8;
       border-bottom: 1px solid #d0d0d0;
       gap: 12px; flex-shrink: 0;
+      cursor: grab; user-select: none;
     }
+    .browser-toolbar.dragging { cursor: grabbing; }
 
     .browser-dots {
       display: flex; gap: 7px; flex-shrink: 0;
@@ -715,7 +731,7 @@
     /* ════════════════════════════════
        CHAT VIEW — Retro Workroom Theme
        ════════════════════════════════ */
-    #chatView {
+    .chat-view-inner {
       display: flex; flex: 1;
       background: #ece5d5;
       overflow: hidden;
@@ -1200,10 +1216,12 @@
       .rug { display: none; }
 
       .browser-window {
-        width: 100vw; height: 100vh;
+        width: 100vw !important; height: 100vh !important;
+        left: 0 !important; top: 0 !important;
         max-width: none; max-height: none;
         border-radius: 0;
       }
+      .win-resize { display: none; }
 
       .browser-toolbar { padding: 10px 12px; }
 
@@ -1306,82 +1324,8 @@
     </div>
   </div>
 
-  <!-- ════════ CHAT OVERLAY ════════ -->
-  <div class="chat-overlay" id="chatOverlay">
-    <div class="chat-backdrop" id="chatBackdrop"></div>
-    <div class="browser-window">
-      <div class="browser-toolbar">
-        <div class="browser-dots">
-          <button class="browser-dot red" id="browserClose" title="Close"></button>
-          <button class="browser-dot yellow" title="Minimize"></button>
-          <button class="browser-dot green" title="Maximize"></button>
-        </div>
-        <div class="browser-url">
-          <span class="browser-url-lock">&#x1F512;</span>
-          <span class="browser-url-text" id="browserUrl">trainual-n8n-chat.pages.dev</span>
-        </div>
-      </div>
-      <div class="browser-body">
-        <div id="chatView">
-          <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-brand">
-          <div class="sidebar-logo">T</div>
-          <span class="sidebar-brand-text">Trainual</span>
-        </div>
-        <button class="back-btn" id="backBtn">
-          <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-          All Agents
-        </button>
-        <button class="new-chat-btn" id="newChatBtn">
-          <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-          New chat
-          <span class="shortcut">&#8984;N</span>
-        </button>
-      </div>
-      <div class="session-list" id="sessionList"></div>
-      <div class="sidebar-footer">
-        <div class="sidebar-footer-text">
-          <span class="dot"></span> Connected to Trainual
-        </div>
-      </div>
-    </aside>
-
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <main class="chat-main">
-      <div class="topbar">
-        <button class="sidebar-toggle" id="sidebarToggle">
-          <svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
-        </button>
-        <div class="topbar-agent">
-          <span class="topbar-agent-emoji" id="topbarEmoji"></span>
-          <div class="topbar-agent-info">
-            <div class="topbar-title" id="topbarTitle">New conversation</div>
-            <div class="topbar-role" id="topbarRole"></div>
-          </div>
-        </div>
-        <div class="topbar-session-id" id="topbarSessionId"></div>
-      </div>
-
-      <div class="messages" id="messages">
-        <div class="messages-inner" id="messagesInner"></div>
-      </div>
-
-      <div class="input-area">
-        <div class="input-container">
-          <textarea id="input" placeholder="Ask a question..." rows="1"></textarea>
-          <button class="send-btn" id="sendBtn">
-            <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-          </button>
-        </div>
-        <div class="input-hint">Enter to send &middot; Shift+Enter for new line</div>
-      </div>
-    </main>
-  </div>
-      </div> <!-- /browser-body -->
-    </div> <!-- /browser-window -->
-  </div> <!-- /chat-overlay -->
+  <!-- ════════ WINDOW CONTAINER ════════ -->
+  <div id="windowContainer"></div>
 
   <script>
     // ═══════════════════════════════════════
@@ -1406,15 +1350,6 @@
       }
     ];
 
-    // ═══════════════════════════════════════
-    // STATE
-    // ═══════════════════════════════════════
-    var STORAGE_KEY = "trainual_sessions";
-    var currentAgent = null;
-    var sessions = [];
-    var activeSessionId = null;
-    var isSending = false;
-
     // Flatten agents for lookup
     var agentMap = {};
     AGENTS.forEach(function(cat) {
@@ -1422,140 +1357,376 @@
     });
 
     // ═══════════════════════════════════════
-    // DOM
+    // WINDOW MANAGER STATE
     // ═══════════════════════════════════════
-    var hubView = document.getElementById('hubView');
-    var chatView = document.getElementById('chatView');
-    var chatOverlay = document.getElementById('chatOverlay');
-    var chatBackdrop = document.getElementById('chatBackdrop');
-    var browserClose = document.getElementById('browserClose');
-    var browserUrl = document.getElementById('browserUrl');
-    var messagesEl = document.getElementById('messages');
-    var messagesInner = document.getElementById('messagesInner');
-    var inputEl = document.getElementById('input');
-    var sendBtn = document.getElementById('sendBtn');
-    var sessionListEl = document.getElementById('sessionList');
-    var topbarTitle = document.getElementById('topbarTitle');
-    var topbarRole = document.getElementById('topbarRole');
-    var topbarEmoji = document.getElementById('topbarEmoji');
-    var topbarSessionId = document.getElementById('topbarSessionId');
-    var newChatBtn = document.getElementById('newChatBtn');
-    var backBtn = document.getElementById('backBtn');
-    var sidebar = document.getElementById('sidebar');
-    var sidebarToggle = document.getElementById('sidebarToggle');
-    var sidebarOverlay = document.getElementById('sidebarOverlay');
+    var STORAGE_KEY = "trainual_sessions";
+    var openWindows = {};
+    var windowZIndex = 600;
+    var cascadeIndex = 0;
+    var CASCADE_OFFSET = 32;
+    var TIMEOUT_MS = 180000;
+
+    // Configure marked
+    marked.setOptions({ breaks: true, gfm: true });
+    var renderer = new marked.Renderer();
+    renderer.link = function(href, title, text) {
+      if (typeof href === 'object') { title = href.title; text = href.text; href = href.href; }
+      var titleAttr = title ? ' title="' + title + '"' : '';
+      return '<a href="' + href + '"' + titleAttr + ' target="_blank" rel="noopener noreferrer">' + text + '</a>';
+    };
+    marked.setOptions({ renderer: renderer });
 
     // ═══════════════════════════════════════
-    // VIEW SWITCHING
+    // UTILITIES
     // ═══════════════════════════════════════
-    function showHub() {
-      chatOverlay.classList.remove('open');
-      currentAgent = null;
-      document.title = 'Trainual Agent Hub';
-    }
-
-    function showChat(agentId) {
-      var agent = agentMap[agentId];
-      if (!agent || !agent.webhook) return;
-
-      currentAgent = agent;
-      document.title = agent.name + ' — Trainual';
-      inputEl.placeholder = 'Ask ' + agent.name + ' anything...';
-      browserUrl.textContent = 'trainual-n8n-chat.pages.dev/chat/' + agent.id;
-
-      sessions = loadSessions(agent.id);
-      activeSessionId = null;
-
-      topbarEmoji.textContent = agent.emoji;
-      topbarRole.textContent = agent.role;
-
-      chatOverlay.classList.add('open');
-
-      renderSessionList();
-      if (sessions.length > 0) {
-        switchToSession(sessions[0].id);
-      } else {
-        renderEmptyState();
-      }
-
-      inputEl.focus();
-    }
-
-    // ═══════════════════════════════════════
-    // SESSION MANAGEMENT (per-agent)
-    // ═══════════════════════════════════════
-    function storageKey(agentId) { return STORAGE_KEY + '_' + agentId; }
-
+    function escapeHtml(str) { var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
     function generateId() { return 'sess_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function renderMarkdown(text) { try { return marked.parse(text); } catch (e) { return escapeHtml(text); } }
 
+    function storageKey(agentId) { return STORAGE_KEY + '_' + agentId; }
     function loadSessions(agentId) {
       try { return JSON.parse(localStorage.getItem(storageKey(agentId))) || []; }
       catch (e) { return []; }
     }
-
-    function saveSessions() {
-      if (!currentAgent) return;
-      localStorage.setItem(storageKey(currentAgent.id), JSON.stringify(sessions));
+    function saveSessions(win) {
+      localStorage.setItem(storageKey(win.agent.id), JSON.stringify(win.sessions));
     }
 
-    function createSession() {
+    // ═══════════════════════════════════════
+    // WINDOW CREATION
+    // ═══════════════════════════════════════
+    function showChat(agentId) {
+      // If window already open, bring to front
+      if (openWindows[agentId]) {
+        bringToFront(agentId);
+        return;
+      }
+
+      var agent = agentMap[agentId];
+      if (!agent || !agent.webhook) return;
+
+      // Calculate cascade position
+      var baseX = Math.max(60, (window.innerWidth - 580) / 2 - 100);
+      var baseY = Math.max(40, (window.innerHeight - 500) / 2 - 60);
+      var x = baseX + (cascadeIndex % 6) * CASCADE_OFFSET;
+      var y = baseY + (cascadeIndex % 6) * CASCADE_OFFSET;
+      cascadeIndex++;
+
+      // Build window DOM
+      var el = document.createElement('div');
+      el.className = 'browser-window focused';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.zIndex = ++windowZIndex;
+
+      el.innerHTML =
+        '<div class="browser-toolbar">' +
+          '<div class="browser-dots">' +
+            '<button class="browser-dot red" title="Close"></button>' +
+            '<button class="browser-dot yellow" title="Minimize"></button>' +
+            '<button class="browser-dot green" title="Maximize"></button>' +
+          '</div>' +
+          '<div class="browser-url">' +
+            '<span class="browser-url-lock">&#x1F512;</span>' +
+            '<span class="browser-url-text">trainual-n8n-chat.pages.dev/chat/' + agent.id + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="browser-body">' +
+          '<div class="chat-view-inner">' +
+            '<aside class="sidebar">' +
+              '<div class="sidebar-header">' +
+                '<div class="sidebar-brand">' +
+                  '<div class="sidebar-logo">T</div>' +
+                  '<span class="sidebar-brand-text">Trainual</span>' +
+                '</div>' +
+                '<button class="new-chat-btn">' +
+                  '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>' +
+                  ' New chat' +
+                '</button>' +
+              '</div>' +
+              '<div class="session-list"></div>' +
+              '<div class="sidebar-footer">' +
+                '<div class="sidebar-footer-text">' +
+                  '<span class="dot"></span> Connected to Trainual' +
+                '</div>' +
+              '</div>' +
+            '</aside>' +
+            '<div class="sidebar-overlay"></div>' +
+            '<main class="chat-main">' +
+              '<div class="topbar">' +
+                '<button class="sidebar-toggle">' +
+                  '<svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>' +
+                '</button>' +
+                '<div class="topbar-agent">' +
+                  '<span class="topbar-agent-emoji">' + agent.emoji + '</span>' +
+                  '<div class="topbar-agent-info">' +
+                    '<div class="topbar-title">' + escapeHtml(agent.name) + '</div>' +
+                    '<div class="topbar-role">' + escapeHtml(agent.role) + '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="topbar-session-id"></div>' +
+              '</div>' +
+              '<div class="messages"><div class="messages-inner"></div></div>' +
+              '<div class="input-area">' +
+                '<div class="input-container">' +
+                  '<textarea placeholder="Ask ' + escapeHtml(agent.name) + ' anything..." rows="1"></textarea>' +
+                  '<button class="send-btn">' +
+                    '<svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>' +
+                  '</button>' +
+                '</div>' +
+                '<div class="input-hint">Enter to send &middot; Shift+Enter for new line</div>' +
+              '</div>' +
+            '</main>' +
+          '</div>' +
+        '</div>' +
+        '<div class="win-resize"></div>';
+
+      document.getElementById('windowContainer').appendChild(el);
+
+      // Build window state
+      var win = {
+        el: el,
+        agent: agent,
+        sessions: loadSessions(agent.id),
+        activeSessionId: null,
+        isSending: false,
+        lastFailedText: null,
+        dom: {
+          toolbar: el.querySelector('.browser-toolbar'),
+          closeBtn: el.querySelector('.browser-dot.red'),
+          minBtn: el.querySelector('.browser-dot.yellow'),
+          maxBtn: el.querySelector('.browser-dot.green'),
+          sidebar: el.querySelector('.sidebar'),
+          sidebarOverlay: el.querySelector('.sidebar-overlay'),
+          sidebarToggle: el.querySelector('.sidebar-toggle'),
+          newChatBtn: el.querySelector('.new-chat-btn'),
+          sessionList: el.querySelector('.session-list'),
+          topbarTitle: el.querySelector('.topbar-title'),
+          topbarSessionId: el.querySelector('.topbar-session-id'),
+          messagesEl: el.querySelector('.messages'),
+          messagesInner: el.querySelector('.messages-inner'),
+          inputEl: el.querySelector('textarea'),
+          sendBtn: el.querySelector('.send-btn'),
+          resizeHandle: el.querySelector('.win-resize')
+        }
+      };
+
+      openWindows[agentId] = win;
+
+      // ── Wire events ──
+      wireWindowEvents(win);
+
+      // ── Init content ──
+      renderSessionList(win);
+      if (win.sessions.length > 0) {
+        switchToSession(win, win.sessions[0].id);
+      } else {
+        renderEmptyState(win);
+      }
+
+      // Unfocus others
+      Object.keys(openWindows).forEach(function(id) {
+        if (id !== agentId) openWindows[id].el.classList.remove('focused');
+      });
+
+      setTimeout(function() { win.dom.inputEl.focus(); }, 100);
+    }
+
+    // ═══════════════════════════════════════
+    // WINDOW EVENTS
+    // ═══════════════════════════════════════
+    function wireWindowEvents(win) {
+      var agentId = win.agent.id;
+
+      // Click to focus
+      win.el.addEventListener('mousedown', function() { bringToFront(agentId); });
+
+      // Close
+      win.dom.closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeWindow(agentId);
+      });
+
+      // Minimize (toggle visibility)
+      win.dom.minBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        win.el.style.display = win.el.style.display === 'none' ? 'flex' : 'none';
+      });
+
+      // Maximize (toggle fullscreen-ish)
+      win.dom.maxBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (win.el.dataset.maximized === 'true') {
+          // Restore
+          win.el.style.left = win.el.dataset.restoreX;
+          win.el.style.top = win.el.dataset.restoreY;
+          win.el.style.width = win.el.dataset.restoreW;
+          win.el.style.height = win.el.dataset.restoreH;
+          win.el.dataset.maximized = 'false';
+        } else {
+          // Save current state
+          win.el.dataset.restoreX = win.el.style.left;
+          win.el.dataset.restoreY = win.el.style.top;
+          win.el.dataset.restoreW = win.el.style.width || '580px';
+          win.el.dataset.restoreH = win.el.style.height || '500px';
+          // Maximize
+          win.el.style.left = '20px';
+          win.el.style.top = '20px';
+          win.el.style.width = (window.innerWidth - 40) + 'px';
+          win.el.style.height = (window.innerHeight - 40) + 'px';
+          win.el.dataset.maximized = 'true';
+        }
+      });
+
+      // Drag
+      win.dom.toolbar.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.browser-dot') || e.target.closest('.browser-url')) return;
+        e.preventDefault();
+        bringToFront(agentId);
+        var rect = win.el.getBoundingClientRect();
+        var offX = e.clientX - rect.left;
+        var offY = e.clientY - rect.top;
+        win.dom.toolbar.classList.add('dragging');
+
+        function onMove(e) {
+          win.el.style.left = Math.max(0, e.clientX - offX) + 'px';
+          win.el.style.top = Math.max(0, e.clientY - offY) + 'px';
+          if (win.el.dataset.maximized === 'true') {
+            win.el.style.width = win.el.dataset.restoreW;
+            win.el.style.height = win.el.dataset.restoreH;
+            win.el.dataset.maximized = 'false';
+          }
+        }
+        function onUp() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          win.dom.toolbar.classList.remove('dragging');
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      // Resize
+      win.dom.resizeHandle.addEventListener('mousedown', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        bringToFront(agentId);
+        var startX = e.clientX, startY = e.clientY;
+        var startW = win.el.offsetWidth, startH = win.el.offsetHeight;
+
+        function onMove(e) {
+          win.el.style.width = Math.max(380, startW + (e.clientX - startX)) + 'px';
+          win.el.style.height = Math.max(320, startH + (e.clientY - startY)) + 'px';
+        }
+        function onUp() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      // Sidebar
+      win.dom.sidebarToggle.addEventListener('click', function() { win.dom.sidebar.classList.toggle('open'); });
+      win.dom.sidebarOverlay.addEventListener('click', function() { win.dom.sidebar.classList.remove('open'); });
+
+      // New chat
+      win.dom.newChatBtn.addEventListener('click', function() {
+        createSession(win);
+        renderSessionList(win);
+        win.dom.inputEl.focus();
+      });
+
+      // Send
+      win.dom.sendBtn.addEventListener('click', function() { sendMessage(win); });
+      win.dom.inputEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(win); }
+      });
+      win.dom.inputEl.addEventListener('input', function() {
+        win.dom.inputEl.style.height = '24px';
+        win.dom.inputEl.style.height = Math.min(win.dom.inputEl.scrollHeight, 120) + 'px';
+      });
+    }
+
+    function bringToFront(agentId) {
+      Object.keys(openWindows).forEach(function(id) {
+        openWindows[id].el.classList.remove('focused');
+      });
+      var win = openWindows[agentId];
+      if (!win) return;
+      win.el.style.zIndex = ++windowZIndex;
+      win.el.classList.add('focused');
+    }
+
+    function closeWindow(agentId) {
+      var win = openWindows[agentId];
+      if (!win) return;
+      win.el.classList.add('closing');
+      win.el.classList.remove('focused');
+      setTimeout(function() {
+        win.el.remove();
+        delete openWindows[agentId];
+      }, 200);
+    }
+
+    // ═══════════════════════════════════════
+    // SESSION MANAGEMENT (scoped per window)
+    // ═══════════════════════════════════════
+    function createSession(win) {
       var session = { id: generateId(), title: "New conversation", messages: [], createdAt: Date.now(), updatedAt: Date.now() };
-      sessions.unshift(session);
-      saveSessions();
-      switchToSession(session.id);
+      win.sessions.unshift(session);
+      saveSessions(win);
+      switchToSession(win, session.id);
       return session;
     }
 
-    function deleteSession(id, e) {
+    function deleteSession(win, id, e) {
       e.stopPropagation();
-      sessions = sessions.filter(function(s) { return s.id !== id; });
-      saveSessions();
-      if (activeSessionId === id) {
-        if (sessions.length > 0) switchToSession(sessions[0].id);
-        else { activeSessionId = null; renderEmptyState(); }
+      win.sessions = win.sessions.filter(function(s) { return s.id !== id; });
+      saveSessions(win);
+      if (win.activeSessionId === id) {
+        if (win.sessions.length > 0) switchToSession(win, win.sessions[0].id);
+        else { win.activeSessionId = null; renderEmptyState(win); }
       }
-      renderSessionList();
+      renderSessionList(win);
     }
 
-    function switchToSession(id) {
-      activeSessionId = id;
-      var session = sessions.find(function(s) { return s.id === id; });
+    function switchToSession(win, id) {
+      win.activeSessionId = id;
+      var session = win.sessions.find(function(s) { return s.id === id; });
       if (!session) return;
-      topbarTitle.textContent = session.title === 'New conversation' ? currentAgent.name : session.title;
-      topbarSessionId.textContent = session.id;
-      renderMessages(session);
-      renderSessionList();
-      closeSidebar();
+      win.dom.topbarTitle.textContent = session.title === 'New conversation' ? win.agent.name : session.title;
+      win.dom.topbarSessionId.textContent = session.id;
+      renderMessages(win, session);
+      renderSessionList(win);
+      win.dom.sidebar.classList.remove('open');
     }
 
-    function getActiveSession() {
-      return sessions.find(function(s) { return s.id === activeSessionId; });
+    function getActiveSession(win) {
+      return win.sessions.find(function(s) { return s.id === win.activeSessionId; });
     }
 
-    function updateSessionTitle(session) {
+    function updateSessionTitle(win, session) {
       var first = session.messages.find(function(m) { return m.type === 'user'; });
       if (first) {
         session.title = first.text.length > 40 ? first.text.slice(0, 40) + '\u2026' : first.text;
-        topbarTitle.textContent = session.title;
+        win.dom.topbarTitle.textContent = session.title;
       }
     }
 
     // ═══════════════════════════════════════
-    // RENDERING — Chat
+    // RENDERING (scoped per window)
     // ═══════════════════════════════════════
-    function escapeHtml(str) { var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
-
-    function renderEmptyState() {
-      topbarTitle.textContent = currentAgent.name;
-      topbarSessionId.textContent = '';
-      messagesInner.innerHTML = '';
-      messagesInner.appendChild(createWelcome());
+    function renderEmptyState(win) {
+      win.dom.topbarTitle.textContent = win.agent.name;
+      win.dom.topbarSessionId.textContent = '';
+      win.dom.messagesInner.innerHTML = '';
+      win.dom.messagesInner.appendChild(createWelcome(win));
     }
 
-    function createWelcome() {
-      var agent = currentAgent;
+    function createWelcome(win) {
+      var agent = win.agent;
       var div = document.createElement('div');
-      div.className = 'welcome'; div.id = 'welcome';
+      div.className = 'welcome';
 
       var chipsHtml = '';
       if (agent.chips && agent.chips.length) {
@@ -1567,37 +1738,21 @@
       div.innerHTML = '<div class="welcome-icon">' + agent.emoji + '</div><h2>' + escapeHtml(agent.name) + '</h2><p>' + escapeHtml(agent.desc) + '</p>' + chipsHtml;
 
       div.querySelectorAll('.welcome-chip').forEach(function(chip) {
-        chip.addEventListener('click', function() { inputEl.value = chip.dataset.q; sendMessage(); });
+        chip.addEventListener('click', function() { win.dom.inputEl.value = chip.dataset.q; sendMessage(win); });
       });
       return div;
     }
 
-    function renderMessages(session) {
-      messagesInner.innerHTML = '';
-      if (session.messages.length === 0) messagesInner.appendChild(createWelcome());
-      else session.messages.forEach(function(msg) { addMessageBubble(msg.text, msg.type, false); });
-      scrollToBottom();
+    function renderMessages(win, session) {
+      win.dom.messagesInner.innerHTML = '';
+      if (session.messages.length === 0) win.dom.messagesInner.appendChild(createWelcome(win));
+      else session.messages.forEach(function(msg) { addMessageBubble(win, msg.text, msg.type, false); });
+      scrollToBottom(win);
     }
 
-    // Configure marked
-    marked.setOptions({ breaks: true, gfm: true });
-    var renderer = new marked.Renderer();
-    renderer.link = function(href, title, text) {
-      // Handle both old and new marked.js API
-      if (typeof href === 'object') { title = href.title; text = href.text; href = href.href; }
-      var titleAttr = title ? ' title="' + title + '"' : '';
-      return '<a href="' + href + '"' + titleAttr + ' target="_blank" rel="noopener noreferrer">' + text + '</a>';
-    };
-    marked.setOptions({ renderer: renderer });
-
-    function renderMarkdown(text) {
-      try { return marked.parse(text); }
-      catch (e) { return escapeHtml(text); }
-    }
-
-    function addMessageBubble(text, type, animate) {
+    function addMessageBubble(win, text, type, animate) {
       if (animate === undefined) animate = true;
-      var welcome = document.getElementById('welcome');
+      var welcome = win.dom.messagesInner.querySelector('.welcome');
       if (welcome) welcome.remove();
 
       if (type === 'bot') {
@@ -1614,7 +1769,6 @@
         mdContent.innerHTML = renderMarkdown(text);
         div.appendChild(mdContent);
 
-        // Copy button
         var copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
         copyBtn.title = 'Copy to clipboard';
@@ -1633,152 +1787,156 @@
 
         wrapper.appendChild(div);
         wrapper.appendChild(copyBtn);
-        messagesInner.appendChild(wrapper);
+        win.dom.messagesInner.appendChild(wrapper);
       } else {
         var div = document.createElement('div');
         div.className = 'message user';
         if (!animate) div.style.animation = 'none';
         div.textContent = text;
-        messagesInner.appendChild(div);
+        win.dom.messagesInner.appendChild(div);
       }
 
-      scrollToBottom();
+      scrollToBottom(win);
     }
 
-    function showTyping() {
+    function showTyping(win) {
       var div = document.createElement('div');
-      div.className = 'message bot typing-indicator'; div.id = 'typing';
+      div.className = 'message bot typing-indicator';
       div.innerHTML = '<span></span><span></span><span></span>';
-      messagesInner.appendChild(div); scrollToBottom();
+      win.dom.messagesInner.appendChild(div);
+      scrollToBottom(win);
     }
 
-    function removeTyping() { var el = document.getElementById('typing'); if (el) el.remove(); }
-    function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+    function removeTyping(win) {
+      var el = win.dom.messagesInner.querySelector('.typing-indicator');
+      if (el) el.remove();
+    }
 
-    // Session list
-    function renderSessionList() {
-      sessionListEl.innerHTML = '';
-      if (sessions.length === 0) {
-        sessionListEl.innerHTML = '<div style="padding:24px 8px;text-align:center"><p style="font-size:11px;color:#7a6a5a;line-height:1.5;font-family:DM Sans,sans-serif">No conversations yet.<br>Start a new chat to begin.</p></div>';
+    function scrollToBottom(win) { win.dom.messagesEl.scrollTop = win.dom.messagesEl.scrollHeight; }
+
+    function renderSessionList(win) {
+      var el = win.dom.sessionList;
+      el.innerHTML = '';
+      if (win.sessions.length === 0) {
+        el.innerHTML = '<div style="padding:24px 8px;text-align:center"><p style="font-size:11px;color:#7a6a5a;line-height:1.5;font-family:DM Sans,sans-serif">No conversations yet.<br>Start a new chat to begin.</p></div>';
         return;
       }
       var now = Date.now(), today = [], yesterday = [], older = [];
-      sessions.forEach(function(s) {
+      win.sessions.forEach(function(s) {
         var age = now - s.updatedAt;
         if (age < 86400000) today.push(s);
         else if (age < 172800000) yesterday.push(s);
         else older.push(s);
       });
-      if (today.length) renderGroup("Today", today);
-      if (yesterday.length) renderGroup("Yesterday", yesterday);
-      if (older.length) renderGroup("Previous", older);
+      if (today.length) renderGroup(win, "Today", today);
+      if (yesterday.length) renderGroup(win, "Yesterday", yesterday);
+      if (older.length) renderGroup(win, "Previous", older);
     }
 
-    function renderGroup(label, items) {
+    function renderGroup(win, label, items) {
       var gl = document.createElement('div'); gl.className = 'session-group-label'; gl.textContent = label;
-      sessionListEl.appendChild(gl);
+      win.dom.sessionList.appendChild(gl);
       items.forEach(function(s) {
         var item = document.createElement('div');
-        item.className = 'session-item' + (s.id === activeSessionId ? ' active' : '');
+        item.className = 'session-item' + (s.id === win.activeSessionId ? ' active' : '');
         item.innerHTML = '<div class="session-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="session-info"><div class="session-title">' + escapeHtml(s.title) + '</div><div class="session-time">' + s.messages.length + ' message' + (s.messages.length !== 1 ? 's' : '') + '</div></div>';
         var del = document.createElement('button'); del.className = 'session-delete'; del.title = 'Delete';
         del.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>';
-        del.addEventListener('click', function(e) { deleteSession(s.id, e); });
+        del.addEventListener('click', function(e) { deleteSession(win, s.id, e); });
         item.appendChild(del);
-        item.addEventListener('click', function() { switchToSession(s.id); });
-        sessionListEl.appendChild(item);
+        item.addEventListener('click', function() { switchToSession(win, s.id); });
+        win.dom.sessionList.appendChild(item);
       });
     }
 
     // ═══════════════════════════════════════
-    // SENDING
+    // SENDING (scoped per window)
     // ═══════════════════════════════════════
-    var TIMEOUT_MS = 180000;
-    var lastFailedText = null;
-
-    function sendMessage(retryText) {
-      var text = retryText || inputEl.value.trim();
-      if (!text || isSending || !currentAgent) return;
-      if (!activeSessionId) createSession();
-      var session = getActiveSession();
+    function sendMessage(win, retryText) {
+      var text = retryText || win.dom.inputEl.value.trim();
+      if (!text || win.isSending) return;
+      if (!win.activeSessionId) createSession(win);
+      var session = getActiveSession(win);
       if (!session) return;
 
-      isSending = true; sendBtn.disabled = true;
-      sendBtn.classList.add('loading');
-      lastFailedText = null;
+      win.isSending = true;
+      win.dom.sendBtn.disabled = true;
+      win.dom.sendBtn.classList.add('loading');
+      win.lastFailedText = null;
 
-      // Remove any existing retry buttons
-      var oldRetry = document.querySelector('.retry-btn');
+      var oldRetry = win.dom.messagesInner.querySelector('.retry-btn');
       if (oldRetry) oldRetry.parentElement.remove();
 
       if (!retryText) {
         session.messages.push({ text: text, type: 'user' });
         session.updatedAt = Date.now();
-        updateSessionTitle(session); saveSessions(); renderSessionList();
-        addMessageBubble(text, 'user');
+        updateSessionTitle(win, session);
+        saveSessions(win);
+        renderSessionList(win);
+        addMessageBubble(win, text, 'user');
       }
-      inputEl.value = ''; inputEl.style.height = '24px';
-      showTyping();
+      win.dom.inputEl.value = '';
+      win.dom.inputEl.style.height = '24px';
+      showTyping(win);
 
-      // Timeout controller
       var controller = new AbortController();
       var timeoutId = setTimeout(function() { controller.abort(); }, TIMEOUT_MS);
 
-      fetch(currentAgent.webhook, {
+      fetch(win.agent.webhook, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chatInput: text, sessionId: session.id, agent: currentAgent.id }),
+        body: JSON.stringify({ chatInput: text, sessionId: session.id, agent: win.agent.id }),
         signal: controller.signal
       }).then(function(res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       }).then(function(data) {
         clearTimeout(timeoutId);
-        removeTyping();
+        removeTyping(win);
         var botMessages = [];
         if (data && data.messages && data.messages.length) botMessages = data.messages.map(function(m) { return m.text; });
         else if (Array.isArray(data)) botMessages = data.map(function(m) { return m.output || m.text; }).filter(Boolean);
         else if (data && data.output) botMessages = [data.output];
-
-        if (botMessages.length === 0) {
-          botMessages = ["I received your message but couldn\u2019t generate a response. Try rephrasing your question."];
-        }
+        if (botMessages.length === 0) botMessages = ["I received your message but couldn\u2019t generate a response. Try rephrasing your question."];
 
         botMessages.forEach(function(t, i) {
           setTimeout(function() {
             session.messages.push({ text: t, type: 'bot' });
-            session.updatedAt = Date.now(); saveSessions();
-            addMessageBubble(t, 'bot');
+            session.updatedAt = Date.now();
+            saveSessions(win);
+            addMessageBubble(win, t, 'bot');
           }, i * 120);
         });
       }).catch(function(err) {
         clearTimeout(timeoutId);
-        removeTyping();
-        lastFailedText = text;
+        removeTyping(win);
+        win.lastFailedText = text;
         var errText = err.name === 'AbortError'
           ? "That took too long \u2014 the agent may be busy. Try again?"
-          : "Something went wrong connecting to " + currentAgent.name + ". Try again?";
-        session.messages.push({ text: errText, type: 'bot' }); saveSessions();
-        addMessageBubble(errText, 'bot');
-        addRetryButton();
+          : "Something went wrong connecting to " + win.agent.name + ". Try again?";
+        session.messages.push({ text: errText, type: 'bot' });
+        saveSessions(win);
+        addMessageBubble(win, errText, 'bot');
+        addRetryButton(win);
       }).finally(function() {
-        isSending = false; sendBtn.disabled = false;
-        sendBtn.classList.remove('loading');
-        inputEl.focus();
+        win.isSending = false;
+        win.dom.sendBtn.disabled = false;
+        win.dom.sendBtn.classList.remove('loading');
+        win.dom.inputEl.focus();
       });
     }
 
-    function addRetryButton() {
+    function addRetryButton(win) {
       var wrap = document.createElement('div');
       wrap.style.cssText = 'align-self:flex-start;animation:msgIn 0.3s cubic-bezier(0.16,1,0.3,1) both';
       var btn = document.createElement('button');
       btn.className = 'retry-btn';
       btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-11.36L3 10"/></svg> Retry';
       btn.addEventListener('click', function() {
-        if (lastFailedText) sendMessage(lastFailedText);
+        if (win.lastFailedText) sendMessage(win, win.lastFailedText);
       });
       wrap.appendChild(btn);
-      messagesInner.appendChild(wrap);
-      scrollToBottom();
+      win.dom.messagesInner.appendChild(wrap);
+      scrollToBottom(win);
     }
 
     // ═══════════════════════════════════════
@@ -1980,31 +2138,18 @@
     }
 
     // ═══════════════════════════════════════
-    // EVENTS
+    // GLOBAL KEYBOARD SHORTCUTS
     // ═══════════════════════════════════════
-    function closeSidebar() { sidebar.classList.remove('open'); }
-
-    backBtn.addEventListener('click', showHub);
-    browserClose.addEventListener('click', showHub);
-    chatBackdrop.addEventListener('click', showHub);
-    sidebarToggle.addEventListener('click', function() { sidebar.classList.toggle('open'); });
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    sendBtn.addEventListener('click', sendMessage);
-
-    inputEl.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-    });
-
-    inputEl.addEventListener('input', function() {
-      inputEl.style.height = '24px';
-      inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
-    });
-
-    newChatBtn.addEventListener('click', function() { createSession(); renderSessionList(); inputEl.focus(); });
-
     document.addEventListener('keydown', function(e) {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'n' && currentAgent) { e.preventDefault(); createSession(); inputEl.focus(); }
-      if (e.key === 'Escape') showHub();
+      if (e.key === 'Escape') {
+        // Close the topmost focused window
+        var topId = null, topZ = 0;
+        Object.keys(openWindows).forEach(function(id) {
+          var z = parseInt(openWindows[id].el.style.zIndex) || 0;
+          if (z > topZ) { topZ = z; topId = id; }
+        });
+        if (topId) closeWindow(topId);
+      }
     });
 
     // ═══════════════════════════════════════
