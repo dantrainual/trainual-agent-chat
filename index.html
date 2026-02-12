@@ -87,7 +87,7 @@
       box-shadow:
         0 16px 56px rgba(0,0,0,0.28),
         0 4px 16px rgba(0,0,0,0.18),
-        0 0 0 1px rgba(0,0,0,0.1);
+        0 0 0 2px var(--agent-color, #888);
     }
 
     .browser-window.closing {
@@ -119,6 +119,27 @@
       cursor: grab; user-select: none;
     }
     .browser-toolbar.dragging { cursor: grabbing; }
+
+    /* Agent color accent strip at top of window */
+    .win-accent {
+      height: 3px; flex-shrink: 0;
+    }
+
+    /* Agent badge in toolbar */
+    .toolbar-agent-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px; letter-spacing: 0.5px;
+      padding: 3px 10px 3px 6px;
+      border-radius: 5px;
+      color: #fff;
+      flex-shrink: 0;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .toolbar-agent-badge .badge-emoji {
+      font-size: 13px;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+    }
 
     .browser-dots {
       display: flex; gap: 7px; flex-shrink: 0;
@@ -744,6 +765,18 @@
       display: flex; flex-direction: column;
       border-right: 2px solid #a89878;
       flex-shrink: 0; position: relative; z-index: 10;
+      transition: width 0.25s cubic-bezier(0.16,1,0.3,1), min-width 0.25s cubic-bezier(0.16,1,0.3,1);
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed {
+      width: 0; min-width: 0;
+      border-right: none;
+    }
+    .sidebar.collapsed .sidebar-header,
+    .sidebar.collapsed .session-list,
+    .sidebar.collapsed .sidebar-footer {
+      opacity: 0; pointer-events: none;
     }
 
     .sidebar::after {
@@ -922,7 +955,7 @@
     }
 
     .sidebar-toggle {
-      display: none; background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px;
+      display: flex; background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px;
     }
 
     .sidebar-toggle svg {
@@ -1226,16 +1259,25 @@
       .browser-toolbar { padding: 10px 12px; }
 
       .sidebar {
-        position: fixed; left: -280px; top: 0; height: 100vh; z-index: 100;
-        transition: left 0.3s cubic-bezier(0.16,1,0.3,1);
+        position: fixed; left: 0; top: 0; height: 100vh; z-index: 100;
+        width: 260px;
+        transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+        transform: translateX(0);
       }
-      .sidebar.open { left: 0; }
+      .sidebar.collapsed { 
+        transform: translateX(-100%);
+        width: 260px; border-right: 2px solid #a89878;
+      }
+      .sidebar.collapsed .sidebar-header,
+      .sidebar.collapsed .session-list,
+      .sidebar.collapsed .sidebar-footer {
+        opacity: 1; pointer-events: auto;
+      }
       .sidebar-overlay {
         display: none; position: fixed; inset: 0;
         background: rgba(2,0,68,0.5); backdrop-filter: blur(4px); z-index: 99;
       }
-      .sidebar.open ~ .sidebar-overlay { display: block; }
-      .sidebar-toggle { display: flex; }
+      .sidebar:not(.collapsed) ~ .sidebar-overlay { display: block; }
       .messages-inner, .input-area { padding-left: 16px; padding-right: 16px; }
     }
   </style>
@@ -1418,13 +1460,23 @@
       el.style.left = x + 'px';
       el.style.top = y + 'px';
       el.style.zIndex = ++windowZIndex;
+      el.style.setProperty('--agent-color', themeColor);
+
+      // Get agent theme color from PIXEL_CHARS
+      var pc = PIXEL_CHARS[agent.id] || PIXEL_CHARS.scout;
+      var themeColor = pc.color;
 
       el.innerHTML =
+        '<div class="win-accent" style="background:' + themeColor + '"></div>' +
         '<div class="browser-toolbar">' +
           '<div class="browser-dots">' +
             '<button class="browser-dot red" title="Close"></button>' +
             '<button class="browser-dot yellow" title="Minimize"></button>' +
             '<button class="browser-dot green" title="Maximize"></button>' +
+          '</div>' +
+          '<div class="toolbar-agent-badge" style="background:' + themeColor + '">' +
+            '<span class="badge-emoji">' + agent.emoji + '</span>' +
+            escapeHtml(agent.name) +
           '</div>' +
           '<div class="browser-url">' +
             '<span class="browser-url-lock">&#x1F512;</span>' +
@@ -1439,7 +1491,7 @@
                   '<div class="sidebar-logo">T</div>' +
                   '<span class="sidebar-brand-text">Trainual</span>' +
                 '</div>' +
-                '<button class="new-chat-btn">' +
+                '<button class="new-chat-btn" style="background:' + themeColor + '">' +
                   '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>' +
                   ' New chat' +
                 '</button>' +
@@ -1625,9 +1677,14 @@
         document.addEventListener('mouseup', onUp);
       });
 
-      // Sidebar
-      win.dom.sidebarToggle.addEventListener('click', function() { win.dom.sidebar.classList.toggle('open'); });
-      win.dom.sidebarOverlay.addEventListener('click', function() { win.dom.sidebar.classList.remove('open'); });
+      // Sidebar toggle (collapsed by default)
+      win.dom.sidebar.classList.add('collapsed');
+      win.dom.sidebarToggle.addEventListener('click', function() {
+        win.dom.sidebar.classList.toggle('collapsed');
+      });
+      win.dom.sidebarOverlay.addEventListener('click', function() {
+        win.dom.sidebar.classList.add('collapsed');
+      });
 
       // New chat
       win.dom.newChatBtn.addEventListener('click', function() {
@@ -1698,7 +1755,6 @@
       win.dom.topbarSessionId.textContent = session.id;
       renderMessages(win, session);
       renderSessionList(win);
-      win.dom.sidebar.classList.remove('open');
     }
 
     function getActiveSession(win) {
