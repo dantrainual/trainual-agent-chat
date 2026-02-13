@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <style>
     :root {
@@ -1407,13 +1408,103 @@
       .sidebar:not(.collapsed) ~ .sidebar-overlay { display: block; }
       .messages-inner, .input-area { padding-left: 16px; padding-right: 16px; }
     }
+    /* ════════════════════════════════
+       AUTH GATE
+       ════════════════════════════════ */
+    #authGate {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #d4c8a8;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+    }
+    #authGate.hidden { display: none; }
+
+    .auth-card {
+      background: #ece5d5; border: 3px solid #a89878;
+      border-radius: 14px; padding: 40px 44px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+      max-width: 380px; width: 90%;
+    }
+    .auth-card .auth-logo {
+      width: 56px; height: 56px; background: #3a3a52; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Press Start 2P', monospace; font-size: 20px; color: #e8e0d0;
+      margin: 0 auto 20px; box-shadow: 0 3px 0 #2a2a3f; border: 2px solid #4a4a62;
+    }
+    .auth-card h1 {
+      font-family: 'Press Start 2P', monospace; font-size: 14px;
+      color: #3a2a1a; margin: 0 0 8px; line-height: 1.6;
+    }
+    .auth-card .auth-subtitle {
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      color: #7a6a5a; margin: 0 0 28px;
+    }
+    .auth-google-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 28px; border-radius: 8px;
+      background: #fff; border: 2px solid #d0d0d0;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      color: #3a3a3a; cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: all 0.15s ease;
+    }
+    .auth-google-btn:hover { border-color: #aaa; box-shadow: 0 3px 10px rgba(0,0,0,0.12); transform: translateY(-1px); }
+    .auth-google-btn:active { transform: translateY(0); }
+    .auth-google-btn svg { width: 20px; height: 20px; }
+    .auth-error {
+      margin-top: 16px; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: #c44a3a;
+    }
+    .auth-error.hidden { display: none; }
+
+    /* User pill in hub */
+    .user-pill {
+      position: fixed; top: 14px; right: 18px; z-index: 450;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(60,50,30,0.7); backdrop-filter: blur(8px);
+      padding: 6px 14px 6px 8px; border-radius: 20px;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; color: #e8e0d0;
+      cursor: default;
+    }
+    .user-pill img {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .user-pill .user-name { opacity: 0.9; }
+    .user-pill .sign-out-btn {
+      background: none; border: none; color: rgba(255,255,255,0.5);
+      font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer;
+      padding: 0; margin-left: 4px;
+    }
+    .user-pill .sign-out-btn:hover { color: #fff; }
   </style>
 </head>
 
 <body>
 
+  <!-- ════════ AUTH GATE ════════ -->
+  <div id="authGate">
+    <div class="auth-card">
+      <div class="auth-logo">T</div>
+      <h1>Agent Hub</h1>
+      <p class="auth-subtitle">Sign in with your Trainual account to continue</p>
+      <button class="auth-google-btn" id="googleSignIn">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Sign in with Google
+      </button>
+      <div class="auth-error hidden" id="authError"></div>
+    </div>
+  </div>
+
+  <!-- ════════ USER PILL ════════ -->
+  <div class="user-pill" id="userPill" style="display:none">
+    <img id="userAvatar" src="" alt="">
+    <span class="user-name" id="userName"></span>
+    <button class="sign-out-btn" id="signOutBtn">sign out</button>
+  </div>
+
   <!-- ════════ HUB VIEW ════════ -->
-  <div id="hubView" class="view visible">
+  <div id="hubView" class="view visible" style="visibility:hidden">
     <div class="room-scene">
 
       <!-- Title Banner -->
@@ -2907,9 +2998,100 @@
     });
 
     // ═══════════════════════════════════════
-    // INIT
+    // AUTH (Supabase + Google)
     // ═══════════════════════════════════════
-    renderHub();
+    var SUPABASE_URL = 'https://nxafcyvvwvpcgzjdftib.supabase.co';
+    var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54YWZjeXZ2d3ZwY2d6amRmdGliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0ODE2MjksImV4cCI6MjA1ODA1NzYyOX0.YpznBa_y0E8ukmP5v-epXwzc1ADep0EjkITnMd9V-CA';
+    var ALLOWED_DOMAIN = 'trainual.com';
+
+    var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    var authGate = document.getElementById('authGate');
+    var authError = document.getElementById('authError');
+    var googleSignIn = document.getElementById('googleSignIn');
+    var userPill = document.getElementById('userPill');
+    var userAvatar = document.getElementById('userAvatar');
+    var userName = document.getElementById('userName');
+    var signOutBtn = document.getElementById('signOutBtn');
+
+    var appInitialized = false;
+
+    function showApp(user) {
+      if (appInitialized) return;
+      appInitialized = true;
+      authGate.classList.add('hidden');
+      document.getElementById('hubView').style.visibility = 'visible';
+
+      // User pill
+      var meta = user.user_metadata || {};
+      userName.textContent = meta.full_name || meta.name || user.email;
+      userAvatar.src = meta.avatar_url || meta.picture || '';
+      if (!userAvatar.src) userAvatar.style.display = 'none';
+      userPill.style.display = 'flex';
+
+      renderHub();
+    }
+
+    function showAuthError(msg) {
+      authError.textContent = msg;
+      authError.classList.remove('hidden');
+    }
+
+    function checkDomain(email) {
+      if (!email) return false;
+      return email.split('@')[1] === ALLOWED_DOMAIN;
+    }
+
+    // Sign in with Google
+    googleSignIn.addEventListener('click', async function() {
+      authError.classList.add('hidden');
+      var { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + window.location.pathname
+        }
+      });
+      if (error) showAuthError(error.message);
+    });
+
+    // Sign out
+    signOutBtn.addEventListener('click', async function() {
+      await supabase.auth.signOut();
+      appInitialized = false;
+      userPill.style.display = 'none';
+      document.getElementById('hubView').style.visibility = 'hidden';
+      authGate.classList.remove('hidden');
+      authError.classList.add('hidden');
+    });
+
+    // ═══════════════════════════════════════
+    // INIT — check session on load
+    // ═══════════════════════════════════════
+    (async function() {
+      var { data: { session } } = await supabase.auth.getSession();
+
+      if (session && session.user) {
+        if (checkDomain(session.user.email)) {
+          showApp(session.user);
+        } else {
+          // Wrong domain — sign them out
+          await supabase.auth.signOut();
+          showAuthError('Access restricted to @' + ALLOWED_DOMAIN + ' accounts.');
+        }
+      }
+
+      // Listen for auth state changes (handles OAuth redirect)
+      supabase.auth.onAuthStateChange(async function(event, session) {
+        if (event === 'SIGNED_IN' && session && session.user) {
+          if (checkDomain(session.user.email)) {
+            showApp(session.user);
+          } else {
+            await supabase.auth.signOut();
+            showAuthError('Access restricted to @' + ALLOWED_DOMAIN + ' accounts.');
+          }
+        }
+      });
+    })();
   </script>
 </body>
 </html>
