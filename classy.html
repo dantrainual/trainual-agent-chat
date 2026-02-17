@@ -893,23 +893,24 @@
     // ═══════════════════════════════════════
     var AGENTS = [
       {
-        category: "Product", categoryIcon: "\uD83D\uDCCB",
+        category: "Industry Agents", categoryIcon: "\uD83D\uDCCB",
         agents: [
-          { id: "scout", name: "Scout", emoji: "\uD83D\uDD0D", role: "Product Feedback", desc: "Knowledge of feedback submitted for product features.", capabilities: ["Weekly Feature Requests", "Feature-specific issues", "Feature tracking & check-ins"], frequency: "Always on", badgeColor: "green", webhook: "https://trainual.app.n8n.cloud/webhook/3d55d6c4-dd85-4160-99be-df6c47a7c27c/chat", chips: ["Share highlights of feedback in the last week", "What is the most common feature request"] },
-          { id: "sage", name: "Sage", emoji: "\uD83D\uDCDA", role: "Knowledge Base Expert", desc: "Instantly finds and explains any SOP, policy, or training document.", capabilities: ["Full Trainual content search", "Plain-language explanations", "Source linking & citations"], frequency: "Always on", badgeColor: "green", webhook: "", chips: [] },
-          { id: "coach", name: "Coach", emoji: "\uD83C\uDFAF", role: "Training Assessor", desc: "Creates quizzes and assessments to verify training completion and comprehension.", capabilities: ["Auto-generated assessments", "Competency scoring", "Knowledge gap reports"], frequency: "On demand", badgeColor: "purple", webhook: "", chips: [] }
+          { id: "forge", name: "Forge", emoji: "\uD83D\uDD0D", role: "Commerical Construction", desc: "Learn how GCs and subs operate, their tech stack, and how to create content that resonates.", capabilities: ["Auto-generated assessments", "Competency scoring", "Knowledge gap reports"], frequency: "Always on", badgeColor: "green", webhook: "https://trainual.app.n8n.cloud/webhook/5fd046e3-f605-4d7b-8570-5636b7b34f40/chat", chips: ["What does a superintendent actually do all day?", "What software do construction companies already use?"]  },
+          { id: "lex", name: "Lex", emoji: "\uD83D\uDCDA", role: "Personal Injury Law", desc: "Learn how PI firms operate as businesses, their tools, and how to speak their language.", capabilities: ["Auto-generated assessments", "Competency scoring", "Knowledge gap reports"], frequency: "Always on", badgeColor: "green", webhook: "https://trainual.app.n8n.cloud/webhook/ce6a4212-917e-4c19-a5b3-c6ce718d2778/chat", chips: ["What keeps a PI managing partner up at night?", "What's a demand package and why should I know?"] },
+          { id: "flux", name: "Flux", emoji: "\uD83C\uDFAF", role: "HVAC & Plumbing", desc: "Learn how service companies run, the tech shortage crisis, and how to write for trade operators.", capabilities: ["Auto-generated assessments", "Competency scoring", "Knowledge gap reports"], frequency: "On demand", badgeColor: "purple", webhook: "https://trainual.app.n8n.cloud/webhook/ffc6c367-1ff8-4ec7-86f3-090eb2fc0e85/chat", chips: ["How does dispatch actually work at an HVAC company?", "What's flat-rate pricing and why does it matter?"] },
+          { id: "pulse", name: "Pulse", emoji: "\uD83C\uDFAF", role: "Ambulatory Health", desc: "Learn how clinics and practices operate, HIPAA basics, and where Trainual fits in healthcare.", capabilities: ["Auto-generated assessments", "Competency scoring", "Knowledge gap reports"], frequency: "On demand", badgeColor: "purple", webhook: "https://trainual.app.n8n.cloud/webhook/15295f33-00ea-4d4b-b0f3-eaea9129bc97/chat", chips: ["What does a practice administrator actually do?", "How is Trainual different from HeatlhStream"] }
         ]
       },
       {
-        category: "Process & Compliance", categoryIcon: "\u2699\uFE0F",
+        category: "Process & Compliance Agents", categoryIcon: "\u2699\uFE0F",
         agents: [
-          { id: "warden", name: "Warden", emoji: "\uD83D\uDEE1\uFE0F", role: "Compliance Monitor", desc: "Tracks training completion rates and flags compliance gaps across teams.", capabilities: ["Completion rate dashboards", "Overdue training alerts", "Compliance audit reports"], frequency: "Daily", badgeColor: "blue", webhook: "", chips: [] },
+          { id: "scout", name: "Scout", emoji: "\uD83D\uDD0D", role: "Product Feedback", desc: "Knowledge of feedback submitted for product features.", capabilities: ["Weekly Feature Requests", "Feature-specific issues", "Feature tracking & check-ins"], frequency: "Always on", badgeColor: "green", webhook: "https://trainual.app.n8n.cloud/webhook/3d55d6c4-dd85-4160-99be-df6c47a7c27c/chat", chips: ["Share highlights of feedback in the last week", "What is the most common feature request"] },
           { id: "quill", name: "Quill", emoji: "\u270D\uFE0F", role: "SOP Writer", desc: "Helps draft, refine, and format standard operating procedures from scratch.", capabilities: ["SOP drafting from prompts", "Brand voice adherence", "Template formatting"], frequency: "On demand", badgeColor: "purple", webhook: "", chips: [] },
           { id: "prism", name: "Prism", emoji: "\uD83D\uDCCA", role: "Analytics Reporter", desc: "Generates training analytics, engagement metrics, and team progress reports.", capabilities: ["Weekly engagement reports", "Team progress breakdowns", "Trend analysis & insights"], frequency: "Weekly", badgeColor: "yellow", webhook: "", chips: [] }
         ]
       },
       {
-        category: "Support & Operations", categoryIcon: "\uD83D\uDE80",
+        category: "Support & Operations Agents", categoryIcon: "\uD83D\uDE80",
         agents: [
           { id: "herald", name: "Herald", emoji: "\uD83D\uDCE3", role: "Update Broadcaster", desc: "Drafts and distributes announcements when SOPs or policies are updated.", capabilities: ["Change summary generation", "Multi-channel distribution", "Acknowledgment tracking"], frequency: "On change", badgeColor: "pink", webhook: "", chips: [] },
           { id: "morgan", name: "Morgan", emoji: "\uD83D\uDDC2\uFE0F", role: "Process Manager", desc: "Keeps your Trainual content organized, identifies gaps, and suggests improvements.", capabilities: ["Content health audits", "Gap identification", "Structure recommendations"], frequency: "Bi-weekly", badgeColor: "blue", webhook: "", chips: [] },
