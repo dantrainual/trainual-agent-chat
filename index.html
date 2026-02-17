@@ -1,12 +1,11 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trainual Agent Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Press+Start+2P&amp;display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
@@ -1477,10 +1476,125 @@
       padding: 0; margin-left: 4px;
     }
     .user-pill .sign-out-btn:hover { color: #fff; }
+
+    /* Theme switcher */
+    .theme-switcher {
+      position: fixed;
+      top: 14px;
+      left: 18px;
+      z-index: 460;
+      display: flex;
+      gap: 6px;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(20, 16, 48, 0.64);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+    }
+    .theme-btn {
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: rgba(255,255,255,0.82);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .theme-btn:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.08);
+    }
+    .theme-btn.active {
+      color: #1f1b2f;
+      background: #f4f1ea;
+      border-color: rgba(255,255,255,0.55);
+    }
+
+    /* Classy mode overrides */
+    body[data-theme="classy"] {
+      background: #151728;
+      color: #eef1f7;
+    }
+    body[data-theme="classy"] #hubView {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(138, 169, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 85% 4%, rgba(111, 223, 188, 0.1), transparent 28%),
+        linear-gradient(180deg, #111425 0%, #151728 100%);
+    }
+    body[data-theme="classy"] .room-scene {
+      filter: saturate(0.72) contrast(1.04) brightness(0.97);
+    }
+    body[data-theme="classy"] .banner-frame {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    }
+    body[data-theme="classy"] .banner-frame h1 {
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.06em;
+      color: #f2f5ff;
+      text-transform: uppercase;
+    }
+    body[data-theme="classy"] .room-subtitle {
+      color: rgba(226,234,255,0.82);
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    body[data-theme="classy"] .desk-name,
+    body[data-theme="classy"] .side-label,
+    body[data-theme="classy"] .furniture-label {
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.04em;
+    }
+    body[data-theme="classy"] .desk-role,
+    body[data-theme="classy"] .desk-status {
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.02em;
+    }
+    body[data-theme="classy"] .auth-card {
+      background: #1f243a;
+      border-color: #323853;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.38);
+    }
+    body[data-theme="classy"] .auth-card .auth-logo {
+      background: #2d3350;
+      border-color: #46507a;
+      box-shadow: 0 3px 0 #212844;
+      color: #f0f3fc;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+    body[data-theme="classy"] .auth-card h1 {
+      color: #f0f3fc;
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    body[data-theme="classy"] .auth-card .auth-subtitle {
+      color: #bac3de;
+    }
+    body[data-theme="classy"] .user-pill,
+    body[data-theme="classy"] .theme-switcher {
+      background: rgba(25, 28, 46, 0.78);
+      border-color: rgba(167, 185, 238, 0.3);
+    }
+    body[data-theme="classy"] .theme-btn.active {
+      background: #dce7ff;
+      color: #121a33;
+    }
   </style>
 </head>
 
-<body>
+<body data-theme="fun">
 
   <!-- ════════ AUTH GATE ════════ -->
   <div id="authGate">
@@ -1489,7 +1603,7 @@
       <h1>Agent Hub</h1>
       <p class="auth-subtitle">Sign in with your Trainual account to continue</p>
       <button class="auth-google-btn" id="googleSignIn">
-        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path></svg>
         Sign in with Google
       </button>
       <div class="auth-error hidden" id="authError"></div>
@@ -1501,6 +1615,12 @@
     <img id="userAvatar" src="" alt="">
     <span class="user-name" id="userName"></span>
     <button class="sign-out-btn" id="signOutBtn">sign out</button>
+  </div>
+
+  <!-- ════════ THEME SWITCHER ════════ -->
+  <div class="theme-switcher" id="themeSwitcher" style="display:none">
+    <button class="theme-btn active" data-theme="fun">Fun</button>
+    <button class="theme-btn" data-theme="classy">Classy</button>
   </div>
 
   <!-- ════════ HUB VIEW ════════ -->
@@ -1549,7 +1669,7 @@
       <!-- Lounge Area -->
       <div class="lounge-area">
         <div class="side-table">
-          <div class="side-table-item">&#x1F34E;</div>
+          <div class="side-table-item">🍎</div>
           <div class="side-table-top"></div>
           <div class="side-table-leg" style="margin:0 auto"></div>
         </div>
@@ -1565,7 +1685,7 @@
           </div>
         </div>
         <div class="side-table">
-          <div class="side-table-item">&#x2615;</div>
+          <div class="side-table-item">☕</div>
           <div class="side-table-top"></div>
           <div class="side-table-leg" style="margin:0 auto"></div>
         </div>
@@ -1576,8 +1696,8 @@
       <!-- Checkered Floor -->
       <div class="room-floor">
         <div class="floor-plants">
-          <span class="floor-plant">&#x1F333;</span>
-          <span class="floor-plant">&#x1F333;</span>
+          <span class="floor-plant">🌳</span>
+          <span class="floor-plant">🌳</span>
         </div>
       </div>
 
@@ -3013,8 +3133,30 @@
     var userAvatar = document.getElementById('userAvatar');
     var userName = document.getElementById('userName');
     var signOutBtn = document.getElementById('signOutBtn');
+    var themeSwitcher = document.getElementById('themeSwitcher');
 
+    var THEME_KEY = 'agent_hub_theme';
     var appInitialized = false;
+
+    function setTheme(theme) {
+      var selected = theme === 'classy' ? 'classy' : 'fun';
+      document.body.setAttribute('data-theme', selected);
+      localStorage.setItem(THEME_KEY, selected);
+      var buttons = document.querySelectorAll('.theme-btn');
+      buttons.forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-theme') === selected);
+      });
+    }
+
+    function initTheme() {
+      var savedTheme = localStorage.getItem(THEME_KEY) || 'fun';
+      setTheme(savedTheme);
+      document.querySelectorAll('.theme-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          setTheme(btn.getAttribute('data-theme'));
+        });
+      });
+    }
 
     function showApp(user) {
       if (appInitialized) return;
@@ -3028,6 +3170,7 @@
       userAvatar.src = meta.avatar_url || meta.picture || '';
       if (!userAvatar.src) userAvatar.style.display = 'none';
       userPill.style.display = 'flex';
+      themeSwitcher.style.display = 'flex';
 
       renderHub();
     }
@@ -3059,6 +3202,7 @@
       await supabase.auth.signOut();
       appInitialized = false;
       userPill.style.display = 'none';
+      themeSwitcher.style.display = 'none';
       document.getElementById('hubView').style.visibility = 'hidden';
       authGate.classList.remove('hidden');
       authError.classList.add('hidden');
@@ -3067,6 +3211,8 @@
     // ═══════════════════════════════════════
     // INIT — check session on load
     // ═══════════════════════════════════════
+    initTheme();
+
     (async function() {
       var { data: { session } } = await supabase.auth.getSession();
 
@@ -3093,5 +3239,6 @@
       });
     })();
   </script>
-</body>
-</html>
+
+
+</body></html>
