@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent Hub</title>
+  <meta http-equiv="refresh" content="0; url=/fun.html" id="fallbackRedirect" />
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #0f1220;
+      color: #eef2ff;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 520px;
+      width: 100%;
+      background: #171b30;
+      border: 1px solid #2b3259;
+      border-radius: 14px;
+      padding: 22px;
+    }
+    h1 { margin: 0 0 8px; font-size: 20px; }
+    p { margin: 0 0 14px; color: #b9c3ef; line-height: 1.45; }
+    .links { display: flex; gap: 10px; }
+    a {
+      text-decoration: none;
+      background: #2d63ff;
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    a.secondary { background: #2a3158; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Loading Agent Hub</h1>
+    <p>If redirect does not start, choose a mode.</p>
+    <div class="links">
+      <a href="/fun.html" data-mode="fun">Open Fun</a>
+      <a class="secondary" href="/classy.html" data-mode="classy">Open Classy</a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var MODE_KEY = 'agent_hub_mode';
+      var mode = localStorage.getItem(MODE_KEY);
+      var target = mode === 'classy' ? '/classy.html' : '/fun.html';
+      window.location.replace(target);
+
+      document.querySelectorAll('a[data-mode]').forEach(function(link) {
+        link.addEventListener('click', function() {
+          localStorage.setItem(MODE_KEY, link.getAttribute('data-mode'));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
